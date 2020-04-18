@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://icon.png" type="Texture" id=1]
+[ext_resource path="res://assets/flower_good.png" type="Texture" id=1]
 
 [node name="Flower" type="Sprite"]
 scale = Vector2( 0.2, 0.2 )

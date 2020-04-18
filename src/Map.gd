@@ -4,6 +4,9 @@ var globals
 var patches_covered = []
 var patch_size = 3
 var rect_patch_offset
+var objects = {} # dictionary of coordinates to objects such as flowers
+
+var Flower = preload("res://src/Flowers/Flower.tscn")
 
 func _ready():
 	globals = get_node("/root/Globals")
@@ -11,9 +14,7 @@ func _ready():
 	globals.patch_size = max(globals.screen_size.x / globals.grid_size.x, globals.screen_size.y / globals.grid_size.y)
 	if int(globals.patch_size) % 2 == 0:
 		globals.patch_size += 1
-	print(globals.patch_size)
-	print(globals.rows_and_cols)
-	position.y += globals.tile_size.y / 2
+	position.y += globals.tile_size.y * 0.75
 	rect_patch_offset = Vector2(0, 0)
 	generate_patches(Vector2(0, 0))
 
@@ -29,7 +30,18 @@ func generate_patches(diamond_patch_offset):
 			var tile_type = randi() % 9 + 1
 			for x in range(-floor(globals.patch_size / 2), floor(globals.patch_size / 2) + 1):
 				for y in range(-floor(globals.patch_size / 2), floor(globals.patch_size / 2) + 1):
-					$"0".set_cell(x + center_cell_idxs.x, y + center_cell_idxs.y, tile_type)
+					var cell_idxs = Vector2(x + center_cell_idxs.x, y + center_cell_idxs.y)
+					$"Tile Layer 1".set_cell(cell_idxs.x, cell_idxs.y, tile_type)
+					if x == 0 and y == 0:
+						$"Tile Layer 1".set_cell(cell_idxs.x, cell_idxs.y, 1)
+						# maybe add a flower:
+						var flower = Flower.instance()
+						flower.position = cell_idxs * globals.tile_size
+						add_child(flower)
+						if objects.get(cell_idxs) == null:
+							objects[cell_idxs] = []
+						objects[cell_idxs].append(flower)
+					
 			patches_covered.append(neighbor_offset)
 
 func _process(delta):
@@ -39,11 +51,6 @@ func _process(delta):
 		rect_patch_offset = new_rect_patch_offset
 		var diamond_patch_offset = Vector2(new_rect_patch_offset.x + new_rect_patch_offset.y, new_rect_patch_offset.y - new_rect_patch_offset.x)
 		generate_patches(diamond_patch_offset)
-
-func generate_patch(patch_offset):
-	for col in range(globals.rows):
-		for row in range(globals.rows):
-			$"0".set_cell(row, col, 9)
 
 func bfs(start: Vector2,e):	
 	# combine neighbour_x and neighbour_y to get the coordinates for a possible neighbour
