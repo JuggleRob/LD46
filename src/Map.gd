@@ -52,46 +52,42 @@ func _process(delta):
 		var diamond_patch_offset = Vector2(new_rect_patch_offset.x + new_rect_patch_offset.y, new_rect_patch_offset.y - new_rect_patch_offset.x)
 		generate_patches(diamond_patch_offset)
 
-func bfs(start: Vector2,e):	
+func return_paths(visited):
+	var paths = {}
+
+func bfs(src: Vector2, tgt: Vector2):
 	# combine neighbour_x and neighbour_y to get the coordinates for a possible neighbour
-	var neighbour_x = [-1,1,0,0]
-	var neighbour_y = [0,0,+1,-1] 
-	
-	var visited = []
-	for row in range(globals.rows):
-		#visited.append([])
-		visited[row] = []
-		for col in range(globals.rows):
-			visited[row][col] = false
-
-	# x and y coordinates of nodes that are in the queue
-	var queue_row = [start.x]
-	var queue_col = [start.y]
-
-	visited[start.x][start.y] = true
-
-	while queue_row.size() > 0:
-		var row = queue_row.pop_front()
-		var col = queue_col.pop_front()
-		if $"0".get_cell(row,col) == 7 : # 7 is een placeholder voor de waarde die de bloem gaat hebben
-			# bloem gevonden, return pad
-			break
-			
-		# Explore neighbours
-		for i in range(4):
-			var neighbour_row = row + neighbour_x[i]
-			var neighbour_col = col + neighbour_y[i]
-			
-			# skip out of bound locations
-			if neighbour_row < 0 or neighbour_col < 0: continue
-			if neighbour_row >= globals.rows or neighbour_col >= globals.col: continue
-			
-			# skip visited locations or impossible tiles
-			if visited[neighbour_row][neighbour_col]: continue
-			# if impossible tile: continue
-			
-			queue_row.push_back(neighbour_row)
-			queue_col.push_back(neighbour_col)
-			visited[neighbour_row][neighbour_col] = true
-		
-		return
+#	var neighbour_x = [-1,1,0,0]
+#	var neighbour_y = [0,0,+1,-1]
+	var connect_4 = [Vector2(-1, 0), Vector2(1, 0), Vector2(0, 1), Vector2(0, -1)]
+	var visited = {} # Dictionary with keys Vector2 and value another Dictionary
+	var shortest_dist = 1000000
+	var current_dist = 0
+	var queue = {
+		current_dist: [{
+			"coords": src,
+			"dist": 0,
+			"back_ptr": null,
+			"flower": false
+		}]
+	}
+	while queue.size() > 0:
+		var nodes_at_min_dist = queue.get(current_dist, [])
+		if nodes_at_min_dist.size() == 0:
+			queue.erase(current_dist)
+			current_dist += 1
+			continue
+		var current_node = nodes_at_min_dist.pop_front()
+		visited[current_node.coords] = current_node
+		for obj in objects.get(current_node.coords, []):
+			if obj is Flower:
+				shortest_dist = current_node.dist
+				current_node.flower = true
+				continue # No need to add neighbors, they are farther away
+		# Queue neighbors, add coords, dist and back_ptr
+		var neighbors = []
+		for dir in connect_4:
+			neighbors.append(current_node.coords + dir)
+		for coords in neighbors:
+#			if visited.get()
+			pass
