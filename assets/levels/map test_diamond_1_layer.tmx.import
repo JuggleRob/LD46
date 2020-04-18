@@ -1,0 +1,22 @@
+[remap]
+
+importer="vnen.tiled_importer"
+type="PackedScene"
+path="res://.import/map test_diamond_1_layer.tmx-b541b59c8097bce97737101d6e0a1886.scn"
+
+[deps]
+
+source_file="res://assets/levels/map test_diamond_1_layer.tmx"
+dest_files=[ "res://.import/map test_diamond_1_layer.tmx-b541b59c8097bce97737101d6e0a1886.scn" ]
+
+[params]
+
+custom_properties=true
+tile_metadata=false
+uv_clip=true
+image_flags=7
+collision_layer=1
+embed_internal_images=false
+save_tiled_properties=false
+add_background=true
+post_import_script=""

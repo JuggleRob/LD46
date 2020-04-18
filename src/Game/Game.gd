@@ -9,3 +9,4 @@ func _ready():
 	for idx in range(5):
 		var gridpos = Vector2(randi() % 5, randi() % 5)
 		$Flowers.add_flower(gridpos)
+	$Flowers/Schaap.set_destination(Vector2(400, 400))
