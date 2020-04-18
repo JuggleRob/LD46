@@ -1,0 +1,73 @@
+[33mcommit 259e2512ba3d18525f6914656b7b87d8a13f7c05[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Jelle Nauta <jelle.nauta@tno.nl>
+Date:   Sat Apr 18 22:03:47 2020 +0200
+
+    sheep and flower
+
+[33mcommit 85999529a1b813e74f73d18cc723a19ea0362fe5[m
+Author: Jelle Nauta <jelle.nauta@tno.nl>
+Date:   Sat Apr 18 21:20:34 2020 +0200
+
+    stop ignoring imports for crispy pixel art. Added real tiles!
+
+[33mcommit 371815dc3d75ed57826624a26a235e51f1c59dae[m[33m ([m[1;31morigin/schaap[m[33m)[m
+Merge: a0be4ee b9da2cf
+Author: Jelle Nauta <jelle.nauta@tno.nl>
+Date:   Sat Apr 18 20:27:21 2020 +0200
+
+    merge schaap into master
+
+[33mcommit b9da2cf5ef549186ce9bf52439b98b352b83504d[m
+Author: Rob <robvanheijst@hotmail.com>
+Date:   Sat Apr 18 20:07:13 2020 +0200
+
+    BFS noob implementation for Jelle
+
+[33mcommit a0be4ee448cd90285af6b64ebfa828cedc407f54[m
+Author: Hapiel <daniel@danielsiegmund.nl>
+Date:   Sat Apr 18 19:54:41 2020 +0200
+
+    git ignore .ini no more
+
+[33mcommit e4b0f4925473be502a1b9cfaa76f2fc01d8f4c4f[m
+Author: Jelle Nauta <jelle.nauta@tno.nl>
+Date:   Sat Apr 18 19:45:53 2020 +0200
+
+    Grid generation works
+
+[33mcommit 003b2306427cdafcf64af6cf6fe799fb4f73650e[m
+Merge: 58c286b 51ab200
+Author: Jelle Nauta <jelle.nauta@tno.nl>
+Date:   Sat Apr 18 15:55:30 2020 +0200
+
+    Merge branch 'schaap' of github.com:jcnauta/LD46 into schaap
+
+[33mcommit 58c286b05b1833749dc478afb4d6ca952f29c2bd[m
+Author: Rob <robvanheijst@hotmail.com>
+Date:   Sat Apr 18 15:52:07 2020 +0200
+
+    Beginning of sheep scene
+
+[33mcommit 1ae4c978e90083b09076c5bb0b90dcdd9562c094[m
+Author: Jelle Nauta <jelle.nauta@tno.nl>
+Date:   Sat Apr 18 15:53:15 2020 +0200
+
+    merge commit
+
+[33mcommit 51ab200c7c33dfa0f93c798219ce8b6dd7221fe3[m
+Author: Rob <robvanheijst@hotmail.com>
+Date:   Sat Apr 18 15:52:07 2020 +0200
+
+    Beginning of sheep scene
+
+[33mcommit aaaf92ef7d48107c644a020fecc35a0304626816[m[33m ([m[1;31morigin/herder[m[33m)[m
+Author: Rob <robvanheijst@hotmail.com>
+Date:   Sat Apr 18 14:45:16 2020 +0200
+
+    Created Shepherd scene. Created the Actor base class. Added sherpherd movement.
+
+[33mcommit c0c41f9deae62989b72630de550d4d417f4297d6[m
+Author: Jelle Nauta <jelle.nauta@tno.nl>
+Date:   Fri Apr 17 22:35:19 2020 +0200
+
+    Initial commit, empty game
