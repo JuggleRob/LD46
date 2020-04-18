@@ -1,0 +1,26 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://src/Map.gd" type="Script" id=1]
+[ext_resource path="res://src/Game/Game.gd" type="Script" id=2]
+[ext_resource path="res://src/Camera2D.gd" type="Script" id=3]
+[ext_resource path="res://assets/levels/map test_diamond.tmx" type="PackedScene" id=4]
+[ext_resource path="res://src/Flowers/Flowers.gd" type="Script" id=5]
+
+[node name="Game" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="map test_diamond" parent="." instance=ExtResource( 4 )]
+script = ExtResource( 1 )
+
+[node name="Flowers" type="Node2D" parent="."]
+script = ExtResource( 5 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+anchor_mode = 0
+current = true
+script = ExtResource( 3 )
