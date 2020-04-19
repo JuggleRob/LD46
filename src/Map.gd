@@ -4,24 +4,25 @@ var globals
 var patches_covered = []
 var patch_size = 3
 var rect_patch_offset
-var objects = {} # dictionary of coordinates to objects such as flowers
+var objects
 
 var Flower_scene = preload("res://src/Flowers/Flower.tscn")
 
 func _ready():
 #	randomize()
 	globals = get_node("/root/Globals")
+	objects = $"/root/Game/Objects"
 	globals.rows_and_cols = globals.screen_size / globals.grid_size
 	globals.patch_size = max(globals.screen_size.x / globals.grid_size.x, globals.screen_size.y / globals.grid_size.y)
 	if int(globals.patch_size) % 2 == 0:
 		globals.patch_size += 1
-	position.y += globals.tile_size.y * 0.75
 	rect_patch_offset = Vector2(0, 0)
 	generate_patches(Vector2(0, 0))
 
 # Generate a set of tiles large enough to fill the screen,
 # at offset patch_offset in diamond grid coordinates.
 func generate_patches(diamond_patch_offset):
+	var base_layer = $"Tile Layer 3"
 	var neighbors = [Vector2(0, 0), Vector2(-1, -1), Vector2(0, -1), Vector2(1, -1),
 			Vector2(1, 0), Vector2(1, 1), Vector2(0, 1), Vector2(-1, 1), Vector2(-1, 0)]
 	for neighbor in neighbors:
@@ -32,29 +33,25 @@ func generate_patches(diamond_patch_offset):
 			for x in range(-floor(globals.patch_size / 2), floor(globals.patch_size / 2) + 1):
 				for y in range(-floor(globals.patch_size / 2), floor(globals.patch_size / 2) + 1):
 					var cell_idxs = Vector2(x + center_cell_idxs.x, y + center_cell_idxs.y)
-					$"Tile Layer 1".set_cell(cell_idxs.x, cell_idxs.y, tile_type)
+					base_layer.set_cell(cell_idxs.x, cell_idxs.y, tile_type)
 					# Set some custom tiles for debugging
 					
 					if center_cell_idxs.x == 0:
 						if cell_idxs.y == 1:
-							$"Tile Layer 1".set_cell(cell_idxs.x, cell_idxs.y, 14)
+							base_layer.set_cell(cell_idxs.x, cell_idxs.y, 14)
 						elif cell_idxs.y == 0 and cell_idxs.x == 1:
-							$"Tile Layer 1".set_cell(cell_idxs.x, cell_idxs.y, 14)
+							base_layer.set_cell(cell_idxs.x, cell_idxs.y, 14)
 						else:
-							$"Tile Layer 1".set_cell(cell_idxs.x, cell_idxs.y, 1)
+							base_layer.set_cell(cell_idxs.x, cell_idxs.y, 1)
 						# maybe add a flower:
-					if randi() % 20 == 0:
-						$"Tile Layer 1".set_cell(cell_idxs.x, cell_idxs.y, 1)
+					if randi() % 3 == 0:
+						base_layer.set_cell(cell_idxs.x, cell_idxs.y, 1)
 						var flower = Flower_scene.instance()
 						if randf() > 0.5:
 							flower.animation = "flower_good"
 						else:
 							flower.animation = "flower_bad"
-						$"/root/Game/Objects".add_child(flower)
-						flower.set_coords(cell_idxs)
-						if objects.get(cell_idxs) == null:
-							objects[cell_idxs] = []
-						objects[cell_idxs].append(flower)
+						$"/root/Game/Objects".add_object(cell_idxs, flower)
 			patches_covered.append(neighbor_offset)
 
 func _process(delta):
@@ -79,7 +76,7 @@ func paths_to_targets(visited, tgts):
 
 # takes two (adjacent) coordinates and determines whether
 # going from src to tgt is possible
-func reachable(src, tgt):
+func reachable(src, tgt, src_lvl = 1):
 	# arrays define side types, starting in the direction -y (right-up)
 	# and going around clockwise.
 	var dir = tgt - src
@@ -129,20 +126,24 @@ func reachable(src, tgt):
 		WATER: [],
 		EMPTY: []
 	}
-	var src_tile = $"Tile Layer 1".get_cell(src.x, src.y)
-	var tgt_tile = $"Tile Layer 1".get_cell(tgt.x, tgt.y)
-	var side_type_src = side_types[src_tile][side_src_idx]
-	var side_type_tgt = side_types[tgt_tile][side_tgt_idx]
-	if side_type_tgt in connectivity[side_type_src]:
-		return true
-	else:
-		return false
+	var src_layer = "Tile Layer " + src_lvl
+	var src_tile = $src_layer.get_cell(src.x, src.y)
+	var tgt_lvls = [src_lvl - 1, src_lvl, src_lvl + 1]
+	for tgt_lvl in tgt_lvls:
+		var tgt_layer = "Tile Layer " + tgt_lvl
+		var tgt_tile = $tgt_layer.get_cell(tgt.x, tgt.y)
+		var side_type_src = side_types[src_tile][side_src_idx]
+		var side_type_tgt = side_types[tgt_tile][side_tgt_idx]
+		if side_type_tgt in connectivity[side_type_src]:
+			return true
+	return false
 
 # Find a path to a specific coordinate, or to the nearest flower
 func bfs(src: Vector2, tgt = null):
 	# combine neighbour_x and neighbour_y to get the coordinates for a possible neighbour
 #	var neighbour_x = [-1,1,0,0]
 #	var neighbour_y = [0,0,+1,-1]
+	var objects = $"/root/"
 	var connect_4 = [Vector2(-1, 0), Vector2(1, 0), Vector2(0, 1), Vector2(0, -1)]
 	var shortest_dist = 1000000
 	var first_node = {

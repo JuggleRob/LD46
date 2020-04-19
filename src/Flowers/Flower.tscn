@@ -100,7 +100,7 @@ animations = [ {
 [node name="Flower" type="AnimatedSprite"]
 frames = SubResource( 21 )
 animation = "flower_bad"
-frame = 5
+frame = 8
 playing = true
-offset = Vector2( 0, -23 )
+offset = Vector2( 0, -11 )
 script = ExtResource( 2 )

@@ -2,7 +2,6 @@ extends Actor
 
 signal update_stomach
 
-var coords
 var destination # diamond coordinates of immediately next tile to move to
 var path
 var next_path_node
@@ -11,74 +10,38 @@ var hunger_rate = 4
 var eat_rate = 30
 var eat_countdown = 0
 var eat_duration = 1
-var animation_dv
-var animation_dt
+var move_dir
 
 func _ready():
 	connect("update_stomach", $"/root/Game/UI/Stomach", "update_stomach")
-#	var ap = $AnimationPlayer
-#	animation_dt = ap.get_animation(ap.get_current_animation()).length
-#	animation_dv = $AnimationPlayer/sprite:position
-	
+	set_coords(Vector2(0, 0))
+	set_move_dir(Vector2(1, 0))
+	move_dir = Vector2(1, 0)
 
-# set destination in diamond coordinates
-func set_destination(dest):
-	self.destination = dest
-	if dest != null:
-		var vec_diamond = self.destination - self.diam_coords
-		move_dir = vec_diamond.normalized() 
-		#(move_vector_rect * Globals.grid_size).normalized()
-		var move_vector_rect = Globals.diam_to_rect(vec_diamond)
-		if move_vector_rect.x  >= 0:
-			self.scale.x = 1
-		else:
-			self.scale.x = -1 
+func set_move_dir(move_vector_diam):
+	move_dir = move_vector_diam
+	var move_vector_rect = Globals.diam_to_rect(move_vector_diam)
+	print(move_vector_rect)
+	if move_vector_rect.x  >= 0:
+		$AnimationPlayer/sprite.flip_h = false
 	else:
-		move_dir = Vector2()
+		$AnimationPlayer/sprite.flip_h = true
+	if move_vector_rect.y >= 0:
+		$AnimationPlayer/sprite.animation = "jump_se"
+	else:
+		$AnimationPlayer/sprite.animation = "jump_ne"
 
-func after_move(delta):
-#	self.position = Vector2()
-	print($"AnimationPlayer/sprite".offset)
-#	$AnimationPlayer/sprite.offset = self.position - $AnimationPlayer/sprite.position
+func set_coords(coords, level = 0):
+	.set_coords(coords)
+	$AnimationPlayer/sprite.offset = self.position
+
+# finds a path, sets destination and keeps sprite accurate
+func jump_ends():
 	if Globals.game_over:
 		return
-	if destination == null:
-		var paths = $"/root/Game/Map".bfs(self.round_diam_coords)
-		if paths.size() > 0:
-			path = paths[0]
-			var dest = path.back()
-			next_path_node = path.pop_front()
-			if next_path_node != null:
-				set_destination(next_path_node.coords)
-	if destination != null:
-		var current_dist_vec = Globals.diam_to_rect(destination) * Globals.grid_size - position
-		if current_dist_vec.length() < 3:
-			# Eat the flower
-			eat_at_coords(self.round_diam_coords)
-			if path != null:
-				# Got a new path
-				next_path_node = path.pop_front()
-				if next_path_node != null:
-					set_destination(next_path_node.coords)
-				else:
-					set_destination(null)
-
-func eat_at_coords(coords):
-	var obj_array = $"/root/Game/Map".objects.get(coords)
-	if obj_array != null:
-		for obj in obj_array:
-			if obj is Flower:
-				if obj.animation == "flower_good":
-					eat_countdown = eat_duration
-				elif obj.animation == "flower_bad":
-					stomach = max(0, stomach - 40)
-					emit_signal("update_stomach", stomach)
-					if stomach <= 0:
-						die()
-				obj_array.erase(obj)
-				obj.queue_free()
-		if obj_array.size() == 0:
-			$"/root/Game/Map".objects.erase(coords)
+	self.set_coords(self.diam_coords + self.move_dir)
+#	# Eat the flower
+	$"/root/Game/Objects".eat_at_coords(self.diam_coords, self)
 
 func die():
 	destination = null
@@ -96,3 +59,6 @@ func _process(delta):
 		emit_signal("update_stomach", stomach)
 		if stomach <= 0:
 			die()
+
+func _on_sprite_animation_finished():
+	jump_ends()

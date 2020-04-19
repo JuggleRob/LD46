@@ -14,7 +14,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/Actors/Actor.gd"
 }, {
-"base": "AnimatedSprite",
+"base": "Actor",
 "class": "Flower",
 "language": "GDScript",
 "path": "res://src/Flowers/Flower.gd"

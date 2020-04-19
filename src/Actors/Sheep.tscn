@@ -103,106 +103,142 @@ atlas = ExtResource( 3 )
 region = Rect2( 525, 0, 35, 32 )
 
 [sub_resource type="AtlasTexture" id=19]
-atlas = ExtResource( 1 )
-region = Rect2( 0, 0, 35, 32 )
+atlas = ExtResource( 5 )
+region = Rect2( 0, 0, 33, 25 )
 
 [sub_resource type="AtlasTexture" id=20]
-atlas = ExtResource( 1 )
-region = Rect2( 35, 0, 35, 32 )
+atlas = ExtResource( 5 )
+region = Rect2( 33, 0, 33, 25 )
 
 [sub_resource type="AtlasTexture" id=21]
-atlas = ExtResource( 1 )
-region = Rect2( 70, 0, 35, 32 )
+atlas = ExtResource( 5 )
+region = Rect2( 66, 0, 33, 25 )
 
 [sub_resource type="AtlasTexture" id=22]
-atlas = ExtResource( 1 )
-region = Rect2( 105, 0, 35, 32 )
+atlas = ExtResource( 5 )
+region = Rect2( 99, 0, 33, 25 )
 
 [sub_resource type="AtlasTexture" id=23]
-atlas = ExtResource( 1 )
-region = Rect2( 140, 0, 35, 32 )
+atlas = ExtResource( 5 )
+region = Rect2( 132, 0, 33, 25 )
 
 [sub_resource type="AtlasTexture" id=24]
-atlas = ExtResource( 1 )
-region = Rect2( 175, 0, 35, 32 )
+atlas = ExtResource( 5 )
+region = Rect2( 165, 0, 33, 25 )
 
 [sub_resource type="AtlasTexture" id=25]
-atlas = ExtResource( 1 )
-region = Rect2( 210, 0, 35, 32 )
+atlas = ExtResource( 5 )
+region = Rect2( 198, 0, 33, 25 )
 
 [sub_resource type="AtlasTexture" id=26]
-atlas = ExtResource( 1 )
-region = Rect2( 245, 0, 35, 32 )
+atlas = ExtResource( 5 )
+region = Rect2( 231, 0, 33, 25 )
 
 [sub_resource type="AtlasTexture" id=27]
-atlas = ExtResource( 1 )
-region = Rect2( 280, 0, 35, 32 )
+atlas = ExtResource( 5 )
+region = Rect2( 264, 0, 33, 25 )
 
 [sub_resource type="AtlasTexture" id=28]
-atlas = ExtResource( 4 )
+atlas = ExtResource( 1 )
 region = Rect2( 0, 0, 35, 32 )
 
 [sub_resource type="AtlasTexture" id=29]
-atlas = ExtResource( 4 )
+atlas = ExtResource( 1 )
 region = Rect2( 35, 0, 35, 32 )
 
 [sub_resource type="AtlasTexture" id=30]
-atlas = ExtResource( 4 )
+atlas = ExtResource( 1 )
 region = Rect2( 70, 0, 35, 32 )
 
 [sub_resource type="AtlasTexture" id=31]
-atlas = ExtResource( 4 )
+atlas = ExtResource( 1 )
 region = Rect2( 105, 0, 35, 32 )
 
 [sub_resource type="AtlasTexture" id=32]
-atlas = ExtResource( 4 )
+atlas = ExtResource( 1 )
 region = Rect2( 140, 0, 35, 32 )
 
 [sub_resource type="AtlasTexture" id=33]
-atlas = ExtResource( 4 )
+atlas = ExtResource( 1 )
 region = Rect2( 175, 0, 35, 32 )
 
 [sub_resource type="AtlasTexture" id=34]
-atlas = ExtResource( 4 )
+atlas = ExtResource( 1 )
 region = Rect2( 210, 0, 35, 32 )
 
 [sub_resource type="AtlasTexture" id=35]
-atlas = ExtResource( 4 )
+atlas = ExtResource( 1 )
 region = Rect2( 245, 0, 35, 32 )
 
 [sub_resource type="AtlasTexture" id=36]
-atlas = ExtResource( 4 )
+atlas = ExtResource( 1 )
 region = Rect2( 280, 0, 35, 32 )
 
 [sub_resource type="AtlasTexture" id=37]
 atlas = ExtResource( 4 )
-region = Rect2( 315, 0, 35, 32 )
+region = Rect2( 0, 0, 35, 32 )
 
 [sub_resource type="AtlasTexture" id=38]
 atlas = ExtResource( 4 )
-region = Rect2( 350, 0, 35, 32 )
+region = Rect2( 35, 0, 35, 32 )
 
 [sub_resource type="AtlasTexture" id=39]
 atlas = ExtResource( 4 )
-region = Rect2( 385, 0, 35, 32 )
+region = Rect2( 70, 0, 35, 32 )
 
 [sub_resource type="AtlasTexture" id=40]
 atlas = ExtResource( 4 )
-region = Rect2( 420, 0, 35, 32 )
+region = Rect2( 105, 0, 35, 32 )
 
 [sub_resource type="AtlasTexture" id=41]
 atlas = ExtResource( 4 )
-region = Rect2( 455, 0, 35, 32 )
+region = Rect2( 140, 0, 35, 32 )
 
 [sub_resource type="AtlasTexture" id=42]
 atlas = ExtResource( 4 )
-region = Rect2( 490, 0, 35, 32 )
+region = Rect2( 175, 0, 35, 32 )
 
 [sub_resource type="AtlasTexture" id=43]
 atlas = ExtResource( 4 )
-region = Rect2( 525, 0, 35, 32 )
+region = Rect2( 210, 0, 35, 32 )
 
 [sub_resource type="AtlasTexture" id=44]
+atlas = ExtResource( 4 )
+region = Rect2( 245, 0, 35, 32 )
+
+[sub_resource type="AtlasTexture" id=45]
+atlas = ExtResource( 4 )
+region = Rect2( 280, 0, 35, 32 )
+
+[sub_resource type="AtlasTexture" id=46]
+atlas = ExtResource( 4 )
+region = Rect2( 315, 0, 35, 32 )
+
+[sub_resource type="AtlasTexture" id=47]
+atlas = ExtResource( 4 )
+region = Rect2( 350, 0, 35, 32 )
+
+[sub_resource type="AtlasTexture" id=48]
+atlas = ExtResource( 4 )
+region = Rect2( 385, 0, 35, 32 )
+
+[sub_resource type="AtlasTexture" id=49]
+atlas = ExtResource( 4 )
+region = Rect2( 420, 0, 35, 32 )
+
+[sub_resource type="AtlasTexture" id=50]
+atlas = ExtResource( 4 )
+region = Rect2( 455, 0, 35, 32 )
+
+[sub_resource type="AtlasTexture" id=51]
+atlas = ExtResource( 4 )
+region = Rect2( 490, 0, 35, 32 )
+
+[sub_resource type="AtlasTexture" id=52]
+atlas = ExtResource( 4 )
+region = Rect2( 525, 0, 35, 32 )
+
+[sub_resource type="AtlasTexture" id=53]
 atlas = ExtResource( 4 )
 region = Rect2( 560, 0, 35, 32 )
 
@@ -251,10 +287,15 @@ animations = [ {
 }, {
 "frames": [ SubResource( 19 ), SubResource( 20 ), SubResource( 21 ), SubResource( 22 ), SubResource( 23 ), SubResource( 24 ), SubResource( 25 ), SubResource( 26 ), SubResource( 27 ) ],
 "loop": true,
+"name": "jump_ne",
+"speed": 15.0
+}, {
+"frames": [ SubResource( 28 ), SubResource( 29 ), SubResource( 30 ), SubResource( 31 ), SubResource( 32 ), SubResource( 33 ), SubResource( 34 ), SubResource( 35 ), SubResource( 36 ) ],
+"loop": true,
 "name": "jump_se",
 "speed": 15.0
 }, {
-"frames": [ SubResource( 28 ), SubResource( 29 ), SubResource( 30 ), SubResource( 31 ), SubResource( 32 ), SubResource( 33 ), SubResource( 34 ), SubResource( 35 ), SubResource( 36 ), SubResource( 37 ), SubResource( 38 ), SubResource( 39 ), SubResource( 40 ), SubResource( 41 ), SubResource( 42 ), SubResource( 43 ), SubResource( 44 ) ],
+"frames": [ SubResource( 37 ), SubResource( 38 ), SubResource( 39 ), SubResource( 40 ), SubResource( 41 ), SubResource( 42 ), SubResource( 43 ), SubResource( 44 ), SubResource( 45 ), SubResource( 46 ), SubResource( 47 ), SubResource( 48 ), SubResource( 49 ), SubResource( 50 ), SubResource( 51 ), SubResource( 52 ), SubResource( 53 ) ],
 "loop": false,
 "name": "death",
 "speed": 15.0
@@ -276,4 +317,6 @@ anims/up = SubResource( 2 )
 frames = SubResource( 54 )
 animation = "jump_se"
 frame = 6
+
 playing = true
+[connection signal="animation_finished" from="AnimationPlayer/sprite" to="." method="jump_ends"]
