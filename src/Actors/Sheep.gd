@@ -49,6 +49,7 @@ func die():
 	next_path_node = null
 	self.move_dir = Vector2(0, 0)
 	Globals.game_over = true
+	get_tree().change_scene("res://src/Screens/EndScreen.tscn")
 
 func _process(delta):
 	if not Globals.game_over:
