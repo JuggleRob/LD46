@@ -31,6 +31,7 @@ func set_destination(dest):
 		move_dir = Vector2()
 
 func after_move(delta):
+	$AnimationPlayer/sprite.offset = self.position
 	if Globals.game_over:
 		return
 	if destination == null:

@@ -21,6 +21,7 @@ current = true
 script = ExtResource( 3 )
 
 [node name="Schaap" parent="." instance=ExtResource( 6 )]
+position = Vector2( 0, 50 )
 
 [node name="UI" type="CanvasLayer" parent="."]
 
