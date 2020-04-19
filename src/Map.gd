@@ -50,7 +50,7 @@ func generate_patches(diamond_patch_offset):
 							flower.animation = "flower_good"
 						else:
 							flower.animation = "flower_bad"
-						add_child(flower)
+						$"/root/Game/Objects".add_child(flower)
 						flower.set_coords(cell_idxs)
 						if objects.get(cell_idxs) == null:
 							objects[cell_idxs] = []

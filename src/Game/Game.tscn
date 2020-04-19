@@ -37,3 +37,5 @@ script = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Objects" type="Node2D" parent="."]

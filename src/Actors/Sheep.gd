@@ -11,9 +11,15 @@ var hunger_rate = 4
 var eat_rate = 30
 var eat_countdown = 0
 var eat_duration = 1
+var animation_dv
+var animation_dt
 
 func _ready():
 	connect("update_stomach", $"/root/Game/UI/Stomach", "update_stomach")
+#	var ap = $AnimationPlayer
+#	animation_dt = ap.get_animation(ap.get_current_animation()).length
+#	animation_dv = $AnimationPlayer/sprite:position
+	
 
 # set destination in diamond coordinates
 func set_destination(dest):
@@ -31,7 +37,9 @@ func set_destination(dest):
 		move_dir = Vector2()
 
 func after_move(delta):
-	$AnimationPlayer/sprite.offset = self.position
+#	self.position = Vector2()
+	print($"AnimationPlayer/sprite".offset)
+#	$AnimationPlayer/sprite.offset = self.position - $AnimationPlayer/sprite.position
 	if Globals.game_over:
 		return
 	if destination == null:
