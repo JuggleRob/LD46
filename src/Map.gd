@@ -44,14 +44,21 @@ func generate_patches(diamond_patch_offset):
 						else:
 							base_layer.set_cell(cell_idxs.x, cell_idxs.y, 1)
 						# maybe add a flower:
-					if randi() % 3 == 0:
-						base_layer.set_cell(cell_idxs.x, cell_idxs.y, 1)
+					if randi() % 1000 == 0:
+						if base_layer.get_cell(cell_idxs.x, cell_idxs.y) != 14:
+							var flower = Flower_scene.instance()
+							if randf() > 0.5:
+								flower.animation = "flower_good"
+							else:
+								flower.animation = "flower_bad"
+							flower.set_random_frame()
+							$"/root/Game/Objects".add_object(cell_idxs, flower)
+							
+					if cell_idxs.x == 0 and cell_idxs.y == 0:
+						base_layer.set_cell(cell_idxs.x, cell_idxs.y, 10)
 						var flower = Flower_scene.instance()
-						if randf() > 0.5:
-							flower.animation = "flower_good"
-						else:
-							flower.animation = "flower_bad"
 						$"/root/Game/Objects".add_object(cell_idxs, flower)
+						
 			patches_covered.append(neighbor_offset)
 
 func _process(delta):

@@ -10,11 +10,20 @@ func add_object(coords, obj):
 		objects[coords] = []
 		objects[coords].append(obj)
 
+func remove_object(coords, obj):
+	var obj_array = objects.get(coords)
+	if obj_array != null:
+		obj_array.erase(obj)
+		if obj_array.size() == 0:
+			objects.erase(coords)
+
+func get_objects(coords):
+	return objects.get(coords, null)
+
 func eat_at_coords(coords, eater):
 	print("eating at " + str(coords))
 	var obj_array = objects.get(coords)
 	if obj_array != null:
-		print(obj_array)
 		for obj in obj_array:
 			if obj is Flower:
 				if obj.animation == "flower_good":
