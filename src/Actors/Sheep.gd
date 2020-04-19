@@ -21,7 +21,9 @@ func _ready():
 	set_coords(Vector2(0, 0))
 	set_move_dir(Vector2(0, 0))
 	objects = $"/root/Game/Objects"
-	base_sprite_position = $AnimationPlayer/sprite.position
+	base_sprite_position = Vector2(10, -6)
+	$AnimationPlayer/sprite.position = base_sprite_position
+	
 
 func set_move_dir(move_vector_diam):
 	move_dir = move_vector_diam
