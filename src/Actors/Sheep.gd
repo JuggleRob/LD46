@@ -15,34 +15,26 @@ var eat_duration = 1
 func _ready():
 	connect("update_stomach", $"/root/Game/UI/Stomach", "update_stomach")
 
-func set_coords(coords):
-	self.coords = coords
-	self.position = coords * globals.grid_size
-
 # set destination in diamond coordinates
 func set_destination(dest):
 	self.destination = dest
 	if dest != null:
-		var vec_diamond = self.destination - self.coords
-		var move_vector_rect = globals.diam_to_rect(vec_diamond)
-		move_dir = (move_vector_rect * globals.grid_size).normalized()
+		var vec_diamond = self.destination - self.diam_coords
+		move_dir = vec_diamond.normalized() 
+		#(move_vector_rect * Globals.grid_size).normalized()
+		var move_vector_rect = Globals.diam_to_rect(vec_diamond)
+		if move_vector_rect.x  >= 0:
+			self.scale.x = 1
+		else:
+			self.scale.x = -1 
 	else:
 		move_dir = Vector2()
-	if move_dir.x >= 0:
-		self.scale.x = 1
-	else:
-		self.scale.x = -1 
 
 func after_move(delta):
-	if globals.game_over:
+	if Globals.game_over:
 		return
-	var rect_coords = self.position / globals.grid_size
-	var diam_coords = globals.rect_to_diam(rect_coords)
-	var floored = Vector2(floor(diam_coords.x + 0.5), floor(diam_coords.y + 0.5))
-	if floored != coords:
-		coords = floored
 	if destination == null:
-		var paths = $"/root/Game/grass_test_slope".bfs(self.coords)
+		var paths = $"/root/Game/Map".bfs(self.round_diam_coords)
 		if paths.size() > 0:
 			path = paths[0]
 			var dest = path.back()
@@ -50,10 +42,10 @@ func after_move(delta):
 			if next_path_node != null:
 				set_destination(next_path_node.coords)
 	if destination != null:
-		var current_dist_vec = globals.diam_to_rect(destination) * globals.grid_size - position
+		var current_dist_vec = Globals.diam_to_rect(destination) * Globals.grid_size - position
 		if current_dist_vec.length() < 3:
 			# Eat the flower
-			eat_at_coords(coords)
+			eat_at_coords(self.round_diam_coords)
 			if path != null:
 				# Got a new path
 				next_path_node = path.pop_front()
@@ -63,7 +55,7 @@ func after_move(delta):
 					set_destination(null)
 
 func eat_at_coords(coords):
-	var obj_array = $"/root/Game/grass_test_slope".objects.get(coords)
+	var obj_array = $"/root/Game/Map".objects.get(coords)
 	if obj_array != null:
 		for obj in obj_array:
 			if obj is Flower:
@@ -77,17 +69,17 @@ func eat_at_coords(coords):
 				obj_array.erase(obj)
 				obj.queue_free()
 		if obj_array.size() == 0:
-			$"/root/Game/grass_test_slope".objects.erase(coords)
+			$"/root/Game/Map".objects.erase(coords)
 
 func die():
 	destination = null
 	path = null
 	next_path_node = null
 	self.move_dir = Vector2(0, 0)
-	globals.game_over = true
+	Globals.game_over = true
 
 func _process(delta):
-	if not globals.game_over:
+	if not Globals.game_over:
 		stomach = max(0, stomach - delta * hunger_rate)
 		if eat_countdown > 0:
 			eat_countdown = max(0, eat_countdown - delta)

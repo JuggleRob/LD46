@@ -98,28 +98,36 @@ func reachable(src, tgt):
 	var CW_DOWN = 2
 	var CW_UP = 3
 	var WATER = 4
+	var EMPTY = 5
 	var side_types = {
 		1: [HIGH, HIGH, HIGH, HIGH],
 		2: [CW_DOWN, LOW, CW_UP, HIGH],
-		3: [WATER, WATER, WATER, WATER],
-		4: [WATER, WATER, WATER, WATER],
-		5: [WATER, WATER, WATER, WATER],
-		6: [WATER, WATER, WATER, WATER],
-		7: [WATER, WATER, WATER, WATER],
-		8: [WATER, WATER, WATER, WATER],
-		9: [WATER, WATER, WATER, WATER],
-		10: [WATER, WATER, WATER, WATER],
-		11: [WATER, WATER, WATER, WATER],
-		12: [WATER, WATER, WATER, WATER],
+		3: [HIGH, CW_DOWN, LOW, CW_UP],
+		4: [CW_DOWN, CW_UP, HIGH, HIGH],
+		5: [HIGH, CW_DOWN, CW_UP, HIGH],
+		6: [LOW, CW_UP, HIGH, CW_DOWN],
+		7: [CW_UP, HIGH, CW_DOWN, LOW],
+		8: [HIGH, HIGH, CW_DOWN, CW_UP],
+		9: [CW_DOWN, LOW, LOW, CW_UP],
+		10: [CW_UP, CW_DOWN, LOW, LOW],
+		11: [LOW, LOW, CW_UP, CW_DOWN],
+		12: [EMPTY, EMPTY, EMPTY, EMPTY],
 		13: [WATER, WATER, WATER, WATER],
-		14: [WATER, WATER, WATER, WATER]
+		14: [WATER, WATER, WATER, WATER],
+		15: [HIGH, HIGH, HIGH, HIGH],
+		16: [EMPTY, EMPTY, EMPTY, EMPTY],
+		17: [WATER, HIGH, WATER, HIGH],
+		18: [HIGH, WATER, HIGH, WATER],
+		19: [HIGH, HIGH, HIGH, HIGH],
+		20: [EMPTY, EMPTY, EMPTY, EMPTY]
 	}
 	var connectivity = {
 		HIGH: [HIGH],
 		LOW: [LOW],
 		CW_DOWN: [CW_UP],
 		CW_UP: [CW_DOWN],
-		WATER: []
+		WATER: [],
+		EMPTY: []
 	}
 	var src_tile = $"Tile Layer 1".get_cell(src.x, src.y)
 	var tgt_tile = $"Tile Layer 1".get_cell(tgt.x, tgt.y)

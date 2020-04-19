@@ -3,21 +3,34 @@ extends Node2D
 
 class_name Actor
 
-export var speed = 25
-var move_dir = Vector2() # move direction	
-var globals
+export var speed = 1
+var move_dir = Vector2() # move direction in diamond coordinates
+var diam_coords = Vector2()
+var round_diam_coords = Vector2()
+var current_level = 1.0
+var height_offset = Vector2() # y-offset, be higher on high levels 
 
-func _ready():
-	globals = get_node("/root/Globals")
-
-func set_coords(coords):
-	self.coords = coords
-	position = globals.diam_to_rect(coords) * globals.grid_size
+# Set diamond coordinates
+func set_coords(diam_coords, level = null):
+	if level != null:
+		var map = $"/root/Game/Map"
+		for layer in map.get_children():
+			print(layer.get_cell(diam_coords.x, diam_coords.y))
+	self.diam_coords = diam_coords
+	# interpolate between four nearest tiles to get effective height
+	var neighbors = []
+	neighbors.append(Vector2(floor(diam_coords.x), floor(diam_coords.y)))
+	neighbors.append(Vector2(floor(diam_coords.x), ceil(diam_coords.y)))
+	neighbors.append(Vector2(ceil(diam_coords.x), ceil(diam_coords.y)))
+	neighbors.append(Vector2(ceil(diam_coords.x), ceil(diam_coords.y)))
+	self.round_diam_coords = Vector2(round(diam_coords.x), round(diam_coords.y))
+	position = Globals.diam_to_rect(diam_coords) * Globals.grid_size + height_offset
 
 func after_move(delta):
 	pass
 
 # Gets called every frame
 func _process(delta: float) -> void:
-	position += speed * move_dir * delta
+	diam_coords += delta * speed * move_dir
+	set_coords(diam_coords + delta * speed * move_dir)
 	self.after_move(delta)

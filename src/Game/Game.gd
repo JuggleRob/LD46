@@ -1,7 +1,5 @@
 extends Control
 
-var globals
-
 func _ready():
-	globals = get_node("/root/Globals")
-	OS.set_window_size(globals.stretch_size)
+	OS.set_window_size(Globals.stretch_size)
+	$Schaap.set_coords(Vector2(0, 0))
