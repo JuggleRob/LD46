@@ -89,17 +89,18 @@ animations = [ {
 "frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ) ],
 "loop": true,
 "name": "flower_good",
-"speed": 12.0
+"speed": 10.0
 }, {
 "frames": [ SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ) ],
 "loop": true,
 "name": "flower_bad",
-"speed": 12.0
+"speed": 10.0
 } ]
 
 [node name="Flower" type="AnimatedSprite"]
 frames = SubResource( 21 )
 animation = "flower_bad"
+frame = 6
 playing = true
 offset = Vector2( 0, -11 )
 script = ExtResource( 2 )
