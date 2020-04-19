@@ -11,15 +11,17 @@ var height_offset = Globals.height_offset_base # y-offset, be higher on high lev
 # Level is automatically adjusted from previous level, unless given as an argument
 func set_coords(diam_coords, level = null):
 	self.diam_coords = diam_coords
-	var levels = $"/root/Game/Map".get_children()
 	if level != null:
 		self.current_level = level
-	# set default lowest possible level
-	elif level == null and self.current_level == null:
-		for lvl_idx in levels.size():
+		return
+	else:
+		var levels = $"/root/Game/Map".get_children()
+		# adjust if moving to an adjacent level
+		for lvl_idx in range(levels.size() - 1, -1, -1):
 			var lowest_cell = levels[lvl_idx].get_cell(diam_coords.x, diam_coords.y)
 			if lowest_cell != -1:
-				self.current_level = lvl_idx
+				print(lowest_cell)
+				self.current_level = lvl_idx + 1
 				break
 	height_offset = Globals.height_offset_base + current_level * Vector2(0, -7)
 	position = Globals.diam_to_rect(diam_coords) * Globals.grid_size + height_offset

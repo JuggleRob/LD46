@@ -17,8 +17,47 @@ func _ready():
 	if int(globals.patch_size) % 2 == 0:
 		globals.patch_size += 1
 	rect_patch_offset = Vector2(0, 0)
-	generate_patches(Vector2(0, 0))
+#	generate_patches(Vector2(0, 0))
+	spawn_flowers()
 
+# spawn flowers on existing tiles, in a 60x60 area around the origin.
+func spawn_flowers():
+# maybe add a flower:
+	var layers = self.get_children()
+	for x in range(-8, 8):
+		for y in range(-4, 4):
+			for layer_idx in range(layers.size(), 0, -1):
+				var layer = layers[layer_idx - 1]
+				if layer.get_cell(x, y) != -1:
+					if randi() % 8 == 0:
+						var flower = Flower_scene.instance()
+						if randf() > 0.5:
+							flower.animation = "flower_good"
+						else:
+							flower.animation = "flower_bad"
+						flower.set_random_frame()
+						var flower_coords = Vector2(x, y)
+						flower.set_coords(flower_coords, layer_idx)
+						$"/root/Game/Objects".add_object(flower_coords, flower)
+					# found the top tile, don't process lower ones
+					break
+					
+#	if cell_idxs.y == 2 and cell_idxs.x == 4 or \
+#		cell_idxs.y == 2 and cell_idxs.x == -3:
+#		if base_layer.get_cell(cell_idxs.x, cell_idxs.y) != 14:
+#			var flower = Flower_scene.instance()
+#			if randf() > 0.5:
+#				flower.animation = "flower_good"
+#			else:
+#				flower.animation = "flower_bad"
+#			flower.set_random_frame()
+#			$"/root/Game/Objects".add_object(cell_idxs, flower)
+#
+#	if cell_idxs.x == 0 and cell_idxs.y == 0:
+#		base_layer.set_cell(cell_idxs.x, cell_idxs.y, 10)
+#		var flower = Flower_scene.instance()
+#		$"/root/Game/Objects".add_object(cell_idxs, flower)
+#		flower.set_coords(Vector2())
 # Generate a set of tiles large enough to fill the screen,
 # at offset patch_offset in diamond grid coordinates.
 func generate_patches(diamond_patch_offset):
@@ -43,33 +82,6 @@ func generate_patches(diamond_patch_offset):
 							base_layer.set_cell(cell_idxs.x, cell_idxs.y, 14)
 						else:
 							base_layer.set_cell(cell_idxs.x, cell_idxs.y, 1)
-						# maybe add a flower:
-					if randi() % 10 == 0:
-						if base_layer.get_cell(cell_idxs.x, cell_idxs.y) != 14:
-							var flower = Flower_scene.instance()
-							if randf() > 0.5:
-								flower.animation = "flower_good"
-							else:
-								flower.animation = "flower_bad"
-							flower.set_random_frame()
-							$"/root/Game/Objects".add_object(cell_idxs, flower)
-					if cell_idxs.y == 2 and cell_idxs.x == 4 or \
-						cell_idxs.y == 2 and cell_idxs.x == -3:
-						if base_layer.get_cell(cell_idxs.x, cell_idxs.y) != 14:
-							var flower = Flower_scene.instance()
-							if randf() > 0.5:
-								flower.animation = "flower_good"
-							else:
-								flower.animation = "flower_bad"
-							flower.set_random_frame()
-							$"/root/Game/Objects".add_object(cell_idxs, flower)
-#							print($"/root/Game/Objects".get_objects(Vector2(-3, 2)))
-							
-					if cell_idxs.x == 0 and cell_idxs.y == 0:
-						base_layer.set_cell(cell_idxs.x, cell_idxs.y, 10)
-						var flower = Flower_scene.instance()
-						$"/root/Game/Objects".add_object(cell_idxs, flower)
-						flower.set_coords(Vector2())
 			patches_covered.append(neighbor_offset)
 
 func _process(delta):
@@ -78,7 +90,7 @@ func _process(delta):
 	if new_rect_patch_offset != rect_patch_offset:
 		rect_patch_offset = new_rect_patch_offset
 		var diamond_patch_offset = Globals.rect_to_diam(new_rect_patch_offset)
-		generate_patches(diamond_patch_offset)
+#		generate_patches(diamond_patch_offset)
 
 func paths_to_targets(visited, tgts):
 	var paths = []
@@ -92,9 +104,23 @@ func paths_to_targets(visited, tgts):
 		paths.append(path)
 	return paths
 
+func top_level(coords):
+	for lvl_idx in range(self.get_children().size(), 0, -1):
+		var layer_name = "Tile Layer " + str(lvl_idx)
+		var layer = get_node(layer_name)
+		var tile = layer.get_cell(coords.x, coords.y)
+		if tile != -1:
+			return lvl_idx
+	return -1
+
+func get_tile(coords, lvl):
+	var layer_name = "Tile Layer " + str(lvl)
+	var layer = get_node(layer_name)
+	return layer.get_cell(coords.x, coords.y)
+
 # takes two (adjacent) coordinates and determines whether
 # going from src to tgt is possible
-func reachable(src, tgt, src_lvl = 1):
+func reachable(src, tgt):
 	# arrays define side types, starting in the direction -y (right-up)
 	# and going around clockwise.
 	var dir = tgt - src
@@ -136,7 +162,7 @@ func reachable(src, tgt, src_lvl = 1):
 		19: [HIGH, HIGH, HIGH, HIGH],
 		20: [EMPTY, EMPTY, EMPTY, EMPTY]
 	}
-	var connectivity = {
+	var conn_same = {
 		HIGH: [HIGH],
 		LOW: [LOW],
 		CW_DOWN: [CW_UP],
@@ -144,16 +170,41 @@ func reachable(src, tgt, src_lvl = 1):
 		WATER: [],
 		EMPTY: []
 	}
-	var src_layer = "Tile Layer " + src_lvl
-	var src_tile = $src_layer.get_cell(src.x, src.y)
-	var tgt_lvls = [src_lvl - 1, src_lvl, src_lvl + 1]
-	for tgt_lvl in tgt_lvls:
-		var tgt_layer = "Tile Layer " + tgt_lvl
-		var tgt_tile = $tgt_layer.get_cell(tgt.x, tgt.y)
-		var side_type_src = side_types[src_tile][side_src_idx]
-		var side_type_tgt = side_types[tgt_tile][side_tgt_idx]
-		if side_type_tgt in connectivity[side_type_src]:
-			return true
+	var conn_up = {
+		HIGH: [LOW],
+		LOW: [],
+		CW_DOWN: [],
+		CW_UP: [],
+		WATER: [],
+		EMPTY: []
+	}
+	var conn_down = {
+		HIGH: [],
+		LOW: [HIGH],
+		CW_DOWN: [],
+		CW_UP: [],
+		WATER: [],
+		EMPTY: []
+	}
+	var src_lvl = top_level(src)
+	var tgt_lvl = top_level(tgt)
+	# two levels difference, can never be reachable
+	if abs(src_lvl - tgt_lvl) > 1 or src_lvl == -1 or tgt_lvl == -1:
+		return false
+	else:
+		var src_tile = get_tile(src, src_lvl)
+		var tgt_tile = get_tile(tgt, tgt_lvl)
+		var src_side = side_types[src_tile][side_src_idx]
+		var tgt_side = side_types[tgt_tile][side_tgt_idx]
+		if tgt_lvl == src_lvl + 1:
+			if tgt_side in conn_up[src_side]:
+				return true
+		elif tgt_lvl == src_lvl - 1:
+			if tgt_side in conn_down[src_side]:
+				return true
+		elif tgt_lvl == src_lvl:
+			if tgt_side in conn_same[src_side]:
+				return true
 	return false
 
 # Find a path to a specific coordinate, or to the nearest flower

@@ -42,6 +42,7 @@ func set_move_dir(move_vector_diam):
 
 func set_coords(coords, level = 0):
 	.set_coords(coords)
+	print(self.height_offset)
 	$AnimationPlayer/sprite.offset = self.position
 
 # finds a path, sets destination and keeps sprite accurate
@@ -51,6 +52,8 @@ func jump_ends():
 	self.set_coords(self.diam_coords + self.move_dir)
 	# Eat flowers, if any
 	objects.eat_at_coords(self.diam_coords, self)
+	if move_dir == Vector2(0, 0):
+		return
 	# Decide next jump
 	var left_dir = move_dir.rotated(-0.5 * PI)
 	left_dir = Vector2(round(left_dir.x), round(left_dir.y))
@@ -58,17 +61,42 @@ func jump_ends():
 	right_dir = Vector2(round(right_dir.x), round(right_dir.y))
 	var dirs = [move_dir, left_dir, right_dir]
 	var flower_found = false
+	# height level of the farthest levels in directions (like dirs)
+	var lvls = [current_level, current_level, current_level]
+	# hold dirs that are unreachable
+	var dead_ends = []
 	for dist in range(1, sight):
-		for dir in dirs:
-			var objs = objects.get_objects(self.diam_coords + dist * dir)
-			if objs != null:
-				for obj in objs:
-					if obj is Flower:
-						set_move_dir(dir)
-						flower_found = true
-						break
-			if flower_found: break
+		for dir_idx in dirs.size():
+			var dir = dirs[dir_idx]
+			if not dir in dead_ends:
+				var next_coords = self.diam_coords + dist * dir
+				if not $"/root/Game/Map".reachable( \
+						self.diam_coords + (dist - 1) * dir, \
+						next_coords):
+					dead_ends.append(dir)
+					continue
+				# reachable! set new height level in this direction
+				lvls[dir_idx] = $"/root/Game/Map".top_level(next_coords)
+				var objs = objects.get_objects(next_coords)
+				if objs != null:
+					for obj in objs:
+						if obj is Flower:
+							set_move_dir(dir)
+							flower_found = true
+							break
+				if flower_found: break
 		if flower_found: break
+	if not flower_found:
+		var backtrack = true
+		for dir in dirs:
+			if $"/root/Game/Map".reachable( \
+					self.diam_coords,
+					self.diam_coords + dir):
+				set_move_dir(dir)
+				backtrack = false
+				break
+		if backtrack:
+			set_move_dir(-move_dir)
 #	var test = randi() % 4
 #	if test == 0:
 #		set_move_dir(Vector2(1, 0))
@@ -100,4 +128,4 @@ func _process(delta):
 
 func _input(event):
 	if event.is_action_pressed("ui_accept"):
-		set_move_dir(Vector2(0, 1))
+		set_move_dir(Vector2(0, -1))

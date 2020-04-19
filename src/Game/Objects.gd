@@ -29,7 +29,6 @@ func get_objects(coords):
 	return objects.get(coords, null)
 
 func eat_at_coords(coords, eater):
-	print("eating at " + str(coords))
 	var obj_array = objects.get(coords)
 	if obj_array != null:
 		for obj in obj_array:
