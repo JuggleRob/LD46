@@ -5,8 +5,7 @@ class_name Actor
 
 var diam_coords = Vector2()
 var current_level = null
-var height_offset_base = Vector2(0, -12)
-var height_offset = height_offset_base # y-offset, be higher on high levels 
+var height_offset = Globals.height_offset_base # y-offset, be higher on high levels 
 
 # Set diamond coordinates
 # Level is automatically adjusted from previous level, unless given as an argument
@@ -22,5 +21,5 @@ func set_coords(diam_coords, level = null):
 			if lowest_cell != -1:
 				self.current_level = lvl_idx
 				break
-	height_offset = height_offset_base + current_level * Vector2(0, -7)
+	height_offset = Globals.height_offset_base + current_level * Vector2(0, -7)
 	position = Globals.diam_to_rect(diam_coords) * Globals.grid_size + height_offset

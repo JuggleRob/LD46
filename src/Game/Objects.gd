@@ -10,6 +10,14 @@ func add_object(coords, obj):
 		objects[coords] = []
 		objects[coords].append(obj)
 
+func remove_objects(coords):
+	var obj_array = objects.get(coords)
+	if obj_array != null:
+		for obj in obj_array:
+			obj_array.erase(obj)
+			obj.queue_free()
+		objects.erase(obj_array)
+
 func remove_object(coords, obj):
 	var obj_array = objects.get(coords)
 	if obj_array != null:
@@ -29,7 +37,7 @@ func eat_at_coords(coords, eater):
 				if obj.animation == "flower_good":
 					eater.eat_countdown = eater.eat_duration
 				elif obj.animation == "flower_bad":
-					eater.stomach = max(0, eater.stomach - 40)
+					eater.stomach = max(0, eater.stomach - 10)
 					eater.emit_signal("update_stomach", eater.stomach)
 					if eater.stomach <= 0:
 						eater.die()

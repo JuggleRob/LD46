@@ -22,7 +22,7 @@ func _ready():
 # Generate a set of tiles large enough to fill the screen,
 # at offset patch_offset in diamond grid coordinates.
 func generate_patches(diamond_patch_offset):
-	var base_layer = $"Tile Layer 3"
+	var base_layer = $"Tile Layer 1"
 	var neighbors = [Vector2(0, 0), Vector2(-1, -1), Vector2(0, -1), Vector2(1, -1),
 			Vector2(1, 0), Vector2(1, 1), Vector2(0, 1), Vector2(-1, 1), Vector2(-1, 0)]
 	for neighbor in neighbors:
@@ -44,7 +44,7 @@ func generate_patches(diamond_patch_offset):
 						else:
 							base_layer.set_cell(cell_idxs.x, cell_idxs.y, 1)
 						# maybe add a flower:
-					if randi() % 1000 == 0:
+					if randi() % 10 == 0:
 						if base_layer.get_cell(cell_idxs.x, cell_idxs.y) != 14:
 							var flower = Flower_scene.instance()
 							if randf() > 0.5:
@@ -53,12 +53,23 @@ func generate_patches(diamond_patch_offset):
 								flower.animation = "flower_bad"
 							flower.set_random_frame()
 							$"/root/Game/Objects".add_object(cell_idxs, flower)
+					if cell_idxs.y == 2 and cell_idxs.x == 4 or \
+						cell_idxs.y == 2 and cell_idxs.x == -3:
+						if base_layer.get_cell(cell_idxs.x, cell_idxs.y) != 14:
+							var flower = Flower_scene.instance()
+							if randf() > 0.5:
+								flower.animation = "flower_good"
+							else:
+								flower.animation = "flower_bad"
+							flower.set_random_frame()
+							$"/root/Game/Objects".add_object(cell_idxs, flower)
+#							print($"/root/Game/Objects".get_objects(Vector2(-3, 2)))
 							
 					if cell_idxs.x == 0 and cell_idxs.y == 0:
 						base_layer.set_cell(cell_idxs.x, cell_idxs.y, 10)
 						var flower = Flower_scene.instance()
 						$"/root/Game/Objects".add_object(cell_idxs, flower)
-						
+						flower.set_coords(Vector2())
 			patches_covered.append(neighbor_offset)
 
 func _process(delta):
@@ -66,7 +77,7 @@ func _process(delta):
 	var new_rect_patch_offset = Vector2(floor(0.5 + (camera_pos.x / (globals.patch_size * globals.grid_size.x))), floor(0.5 + (camera_pos.y / (globals.patch_size * globals.grid_size.y))))
 	if new_rect_patch_offset != rect_patch_offset:
 		rect_patch_offset = new_rect_patch_offset
-		var diamond_patch_offset = Vector2(new_rect_patch_offset.x + new_rect_patch_offset.y, new_rect_patch_offset.y - new_rect_patch_offset.x)
+		var diamond_patch_offset = Globals.rect_to_diam(new_rect_patch_offset)
 		generate_patches(diamond_patch_offset)
 
 func paths_to_targets(visited, tgts):
@@ -197,3 +208,14 @@ func bfs(src: Vector2, tgt = null):
 					checked_nodes[coords] = new_checked
 					queue.append(new_checked)
 	return paths_to_targets(checked_nodes, flower_nodes)
+
+func _input(event):
+	if event is InputEventMouseButton and \
+			event.button_index == BUTTON_LEFT and \
+			event.pressed:
+		var tile_coords = $"Tile Layer 1".world_to_map( \
+				event.position - \
+				0.5 * Globals.screen_size - \
+				Globals.mouse_offset + \
+				$"/root/Game/Camera2D".offset)
+		objects.remove_objects(tile_coords)
