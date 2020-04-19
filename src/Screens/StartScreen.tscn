@@ -1,0 +1,39 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://assets/font/theme.tres" type="Theme" id=1]
+[ext_resource path="res://src/UI/play_button.tscn" type="PackedScene" id=2]
+
+[node name="StartScreen" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( -494.368, -123.789 )
+theme = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="background" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="title" type="Label" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -50.5
+margin_top = 32.0751
+margin_right = 50.5
+margin_bottom = 46.0751
+text = "Sheep Halloumi"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="play_button" parent="." instance=ExtResource( 2 )]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -55.6033
+margin_top = 62.6407
+margin_right = -17.6033
+margin_bottom = 82.6407
+text = "Play"
