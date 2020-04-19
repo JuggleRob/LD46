@@ -275,5 +275,5 @@ anims/up = SubResource( 2 )
 [node name="sprite" type="AnimatedSprite" parent="AnimationPlayer"]
 frames = SubResource( 45 )
 animation = "jump_ne"
-frame = 7
+frame = 8
 playing = true
