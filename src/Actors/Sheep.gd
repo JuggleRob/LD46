@@ -53,6 +53,11 @@ func after_move(delta):
 					set_destination(next_path_node.coords)
 				else:
 					set_destination(null)
+	print(round_diam_coords[1])
+	if self.round_diam_coords[1] < Globals.score :
+		Globals.set_score(round_diam_coords[1])
+		get_node("/root/Game/UI/Score").text = "Score: %s" % Globals.score
+		print("SCORE-------: " + str(Globals.score))
 
 func eat_at_coords(coords):
 	var obj_array = $"/root/Game/Map".objects.get(coords)

@@ -1,5 +1,6 @@
 extends Node
 
+signal score_updated
 var screen_size = Vector2(ProjectSettings.get("display/window/size/width"), ProjectSettings.get("display/window/size/height"))
 var stretch_size = Vector2(4 * screen_size)
 var tile_size = Vector2(28, 21)
@@ -7,6 +8,12 @@ var grid_size = Vector2(28, 14)
 var rows_and_cols = Vector2()
 var patch_size
 var game_over = false
+var score: = 0
+
+func set_score(value: int) -> void:
+	score = value
+	emit_signal("score_updated")
+	return
 
 func rect_to_diam(v):
 	return Vector2(v.x + v.y, v.y - v.x)
