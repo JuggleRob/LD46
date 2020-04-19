@@ -39,6 +39,10 @@ func generate_patches(diamond_patch_offset):
 					if randi() % 20 == 0:
 						$"Tile Layer 1".set_cell(cell_idxs.x, cell_idxs.y, 1)
 						var flower = Flower_scene.instance()
+						if randf() > 0.5:
+							flower.animation = "flower_good"
+						else:
+							flower.animation = "flower_bad"
 						add_child(flower)
 						flower.set_coords(cell_idxs) # * globals.tile_size
 						if objects.get(cell_idxs) == null:
