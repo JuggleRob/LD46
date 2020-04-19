@@ -21,7 +21,7 @@ func _ready():
 func set_move_dir(move_vector_diam):
 	move_dir = move_vector_diam
 	var move_vector_rect = Globals.diam_to_rect(move_vector_diam)
-	print(move_vector_rect)
+#	print(move_vector_rect)
 	if move_vector_rect.x  >= 0:
 		$AnimationPlayer/sprite.flip_h = false
 	else:
@@ -40,7 +40,7 @@ func jump_ends():
 	if Globals.game_over:
 		return
 	self.set_coords(self.diam_coords + self.move_dir)
-#	# Eat the flower
+	# Eat the flower
 	$"/root/Game/Objects".eat_at_coords(self.diam_coords, self)
 
 func die():

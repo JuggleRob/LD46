@@ -14,7 +14,7 @@ func set_coords(diam_coords, level = null):
 	if level != null:
 		var map = $"/root/Game/Map"
 		for layer in map.get_children():
-			print(layer.get_cell(diam_coords.x, diam_coords.y))
+			pass # print(layer.get_cell(diam_coords.x, diam_coords.y))
 	self.diam_coords = diam_coords
 	var levels = $"/root/Game/Map".get_children()
 	# set default lowest possible level
@@ -25,6 +25,4 @@ func set_coords(diam_coords, level = null):
 				self.current_level = lvl_idx
 				break
 	height_offset = height_offset_base + current_level * Vector2(0, -7)
-	print("set position with offset " + str(height_offset))
-	print("diam " + str(diam_coords))
 	position = Globals.diam_to_rect(diam_coords) * Globals.grid_size + height_offset
