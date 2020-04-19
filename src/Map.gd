@@ -9,7 +9,7 @@ var objects
 var Flower_scene = preload("res://src/Flowers/Flower.tscn")
 
 func _ready():
-#	randomize()
+	randomize()
 	globals = get_node("/root/Globals")
 	objects = $"/root/Game/Objects"
 	globals.rows_and_cols = globals.screen_size / globals.grid_size
