@@ -6,3 +6,9 @@ var tile_size = Vector2(28, 21)
 var grid_size = Vector2(28, 14)
 var rows_and_cols = Vector2()
 var patch_size
+
+func rect_to_diam(v):
+	return Vector2(v.x + v.y, v.y - v.x)
+	
+func diam_to_rect(v):
+	return 0.5 * Vector2(v.x - v.y, v.x + v.y)
