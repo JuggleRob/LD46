@@ -9,7 +9,7 @@ var objects = {} # dictionary of coordinates to objects such as flowers
 var Flower_scene = preload("res://src/Flowers/Flower.tscn")
 
 func _ready():
-	randomize()
+#	randomize()
 	globals = get_node("/root/Globals")
 	globals.rows_and_cols = globals.screen_size / globals.grid_size
 	globals.patch_size = max(globals.screen_size.x / globals.grid_size.x, globals.screen_size.y / globals.grid_size.y)
@@ -33,8 +33,15 @@ func generate_patches(diamond_patch_offset):
 				for y in range(-floor(globals.patch_size / 2), floor(globals.patch_size / 2) + 1):
 					var cell_idxs = Vector2(x + center_cell_idxs.x, y + center_cell_idxs.y)
 					$"Tile Layer 1".set_cell(cell_idxs.x, cell_idxs.y, tile_type)
-					if x == 1 and y == 0:
-						$"Tile Layer 1".set_cell(cell_idxs.x, cell_idxs.y, 1)
+					# Set some custom tiles for debugging
+					
+					if center_cell_idxs.x == 0:
+						if cell_idxs.y == 1:
+							$"Tile Layer 1".set_cell(cell_idxs.x, cell_idxs.y, 14)
+						elif cell_idxs.y == 0 and cell_idxs.x == 1:
+							$"Tile Layer 1".set_cell(cell_idxs.x, cell_idxs.y, 14)
+						else:
+							$"Tile Layer 1".set_cell(cell_idxs.x, cell_idxs.y, 1)
 						# maybe add a flower:
 					if randi() % 20 == 0:
 						$"Tile Layer 1".set_cell(cell_idxs.x, cell_idxs.y, 1)
@@ -44,7 +51,7 @@ func generate_patches(diamond_patch_offset):
 						else:
 							flower.animation = "flower_bad"
 						add_child(flower)
-						flower.set_coords(cell_idxs) # * globals.tile_size
+						flower.set_coords(cell_idxs)
 						if objects.get(cell_idxs) == null:
 							objects[cell_idxs] = []
 						objects[cell_idxs].append(flower)
@@ -70,7 +77,61 @@ func paths_to_targets(visited, tgts):
 		paths.append(path)
 	return paths
 
-func bfs(src: Vector2):
+# takes two (adjacent) coordinates and determines whether
+# going from src to tgt is possible
+func reachable(src, tgt):
+	# arrays define side types, starting in the direction -y (right-up)
+	# and going around clockwise.
+	var dir = tgt - src
+	var side_src_idx
+	if dir == Vector2(0, -1):
+		side_src_idx = 0
+	elif dir == Vector2(1, 0):
+		side_src_idx = 1
+	elif dir == Vector2(0, 1):
+		side_src_idx = 2
+	elif dir == Vector2(-1, 0):
+		side_src_idx = 3
+	var side_tgt_idx = (side_src_idx + 2) % 4
+	var HIGH = 0
+	var LOW = 1
+	var CW_DOWN = 2
+	var CW_UP = 3
+	var WATER = 4
+	var side_types = {
+		1: [HIGH, HIGH, HIGH, HIGH],
+		2: [CW_DOWN, LOW, CW_UP, HIGH],
+		3: [WATER, WATER, WATER, WATER],
+		4: [WATER, WATER, WATER, WATER],
+		5: [WATER, WATER, WATER, WATER],
+		6: [WATER, WATER, WATER, WATER],
+		7: [WATER, WATER, WATER, WATER],
+		8: [WATER, WATER, WATER, WATER],
+		9: [WATER, WATER, WATER, WATER],
+		10: [WATER, WATER, WATER, WATER],
+		11: [WATER, WATER, WATER, WATER],
+		12: [WATER, WATER, WATER, WATER],
+		13: [WATER, WATER, WATER, WATER],
+		14: [WATER, WATER, WATER, WATER]
+	}
+	var connectivity = {
+		HIGH: [HIGH],
+		LOW: [LOW],
+		CW_DOWN: [CW_UP],
+		CW_UP: [CW_DOWN],
+		WATER: []
+	}
+	var src_tile = $"Tile Layer 1".get_cell(src.x, src.y)
+	var tgt_tile = $"Tile Layer 1".get_cell(tgt.x, tgt.y)
+	var side_type_src = side_types[src_tile][side_src_idx]
+	var side_type_tgt = side_types[tgt_tile][side_tgt_idx]
+	if side_type_tgt in connectivity[side_type_src]:
+		return true
+	else:
+		return false
+
+# Find a path to a specific coordinate, or to the nearest flower
+func bfs(src: Vector2, tgt = null):
 	# combine neighbour_x and neighbour_y to get the coordinates for a possible neighbour
 #	var neighbour_x = [-1,1,0,0]
 #	var neighbour_y = [0,0,+1,-1]
@@ -88,10 +149,17 @@ func bfs(src: Vector2):
 	}
 	checked_nodes[first_node.coords] = first_node
 	var flower_nodes = []
+	var search_limit = 1000
+	var search_count = 0
 	while queue.size() > 0:
+		search_count += 1
+		if search_count == search_limit:
+			print("Search took too long!")
+			return []
 		var current_node = queue.pop_front()
 		for obj in objects.get(current_node.coords, []):
-			if obj is Flower:
+			if (tgt != null and current_node.coords == tgt) or \
+					(tgt == null and obj is Flower):
 				shortest_dist = current_node.dist
 				current_node.flower = true
 				flower_nodes.append(current_node)
@@ -103,12 +171,13 @@ func bfs(src: Vector2):
 		for coords in neighbors:
 			var maybe_checked = checked_nodes.get(coords)
 			if maybe_checked == null and current_node.dist + 1 <= shortest_dist:
-				var new_checked = {
-					"coords": coords,
-					"dist": current_node.dist + 1,
-					"back_ptr": current_node,
-					"flower": null
-				}
-				checked_nodes[coords] = new_checked
-				queue.append(new_checked)
+				if reachable(current_node.coords, coords):
+					var new_checked = {
+						"coords": coords,
+						"dist": current_node.dist + 1,
+						"back_ptr": current_node,
+						"flower": null
+					}
+					checked_nodes[coords] = new_checked
+					queue.append(new_checked)
 	return paths_to_targets(checked_nodes, flower_nodes)
