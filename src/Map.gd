@@ -344,10 +344,10 @@ func _input(event):
 			if event is InputEventMouseButton:
 				flower_highlight = null
 				if event.button_index == BUTTON_LEFT and event.pressed:
-					if Globals.paused:
-						Globals.paused = false
-						return
 					$"/root/Game/Audio/select".play()
 					flower_highlight
 					objects.remove_objects(tile_coords)
-		
+	if event is InputEventMouseButton:
+		if Globals.paused:
+			Globals.paused = false
+			return	
