@@ -11,6 +11,8 @@ var paused = true
 const height_offset_base = Vector2(0, -5)
 const mouse_offset = Vector2(0, -21)
 
+var highscore = 0
+
 var flowers_eaten = 0
 var distance_covered = 0
 

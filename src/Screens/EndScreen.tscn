@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://assets/font/theme.tres" type="Theme" id=1]
 [ext_resource path="res://src/UI/play_button.tscn" type="PackedScene" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://assets/it_died.png" type="Texture" id=4]
 [ext_resource path="res://src/Screens/EndScreen.gd" type="Script" id=5]
 [ext_resource path="res://src/UI/score.gd" type="Script" id=6]
+[ext_resource path="res://assets/Sheep_animated.tscn" type="PackedScene" id=7]
 [ext_resource path="res://src/UI/score.tscn" type="PackedScene" id=8]
 
 [sub_resource type="Animation" id=1]
@@ -47,6 +48,18 @@ tracks/2/keys = {
 "update": 0,
 "values": [ Vector2( 50, -14.63 ), Vector2( 50, -14.63 ), Vector2( 50, -14.63 ), Vector2( 50, 111.72 ) ]
 }
+tracks/3/type = "value"
+tracks/3/path = NodePath("highscore:rect_position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.3, 1.4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 105.301, -14.1721 ), Vector2( 105.301, -14.1721 ), Vector2( 105.301, 74.3283 ) ]
+}
 
 [node name="EndScreen" type="Control"]
 anchor_right = 1.0
@@ -70,8 +83,22 @@ anchor_top = 1.0
 anchor_bottom = 1.0
 margin_top = -317.364
 margin_right = 113.0
-margin_bottom = -226.361
+margin_bottom = -226.36
 texture = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="highscore" type="Label" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -6.69856
+margin_top = -14.1721
+margin_right = 68.3014
+margin_bottom = 1.82787
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Highscore:"
+align = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -85,12 +112,19 @@ anchor_right = 0.5
 margin_left = -62.0
 margin_top = -14.63
 margin_right = 68.0
-margin_bottom = 0.369984
-custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+margin_bottom = 0.369985
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_colors/font_color_hover = Color( 0.529412, 0.0627451, 0.0627451, 1 )
 custom_colors/font_color_pressed = Color( 0.529412, 0.0627451, 0.0627451, 1 )
 align = 2
+
+[node name="sprite" parent="play_button" instance=ExtResource( 7 )]
+position = Vector2( 69.0559, 6.41502 )
+frame = 2
+
+[node name="sprite2" parent="play_button" instance=ExtResource( 7 )]
+position = Vector2( 135.47, 6.41502 )
+flip_h = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/drop = SubResource( 1 )
