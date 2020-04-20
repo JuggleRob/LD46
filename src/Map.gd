@@ -132,20 +132,22 @@ func random_flowers():
 		if randi() % 8 == 0:
 			spawn_flower(flower_coords)
 
-func flower_count_around(coords, range_param = 3):
+func flower_count_around(coords, range_param):
 	var flower_count = 0
-	for x in range(coords.x - 3, coords.x + 4):
-		for y in range(coords.y - 3, coords.y + 4):
+	for x in range(coords.x - range_param, coords.x + range_param + 1):
+		for y in range(coords.y - range_param, coords.y + range_param + 1):
 			if objects.get_objects(Vector2(x, y)) != null:
 				flower_count += 1
 	return flower_count
 			
 # find fertile tiles and spawn depending on the number of flowers nearby
-func maybe_spawn_flowers(max_flowers = 5, max_in_area = 4):
+func maybe_spawn_flowers(max_flowers = 10, \
+		max_in_area = 5, \
+		area_size_param = 3):
 	for f in max_flowers:
 		var rand_idx = randi() % fertile_array.size()
 		var rand_coords = fertile_array[randi() % fertile_array.size()]
-		if objects.get_objects(rand_coords) == null and flower_count_around(rand_coords) <= max_in_area:
+		if objects.get_objects(rand_coords) == null and flower_count_around(rand_coords, area_size_param) <= max_in_area:
 			spawn_flower(rand_coords)
 
 # Generate a set of tiles large enough to fill the screen,
