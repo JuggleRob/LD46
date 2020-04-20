@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/it_died.png-664df331b1cecaefc3de21a9a5d89442.stex"
+path="res://.import/shepperd_idle.png-2e8c51f0291cc6b90eea0a0b0c5b2902.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/it_died.png"
-dest_files=[ "res://.import/it_died.png-664df331b1cecaefc3de21a9a5d89442.stex" ]
+source_file="res://assets/shepperd_idle.png"
+dest_files=[ "res://.import/shepperd_idle.png-2e8c51f0291cc6b90eea0a0b0c5b2902.stex" ]
 
 [params]
 
