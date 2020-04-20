@@ -9,6 +9,7 @@ var obj_layer
 var tile_layers = []
 var startpos
 var camera
+var flower_highlight = null
 
 var Flower_scene = preload("res://src/Flowers/Flower.tscn")
 
@@ -313,15 +314,11 @@ func bfs(src: Vector2, tgt = null):
 	return paths_to_targets(checked_nodes, flower_nodes)
 
 func _input(event):
-	if event is InputEventMouseButton:
-		if event.button_index == BUTTON_LEFT and event.pressed:
-			if Globals.paused:
-				Globals.paused = false
-				return
-			$"/root/Game/Audio/select".play()
-			var tile_coords
-			var the_tile
-			for layer_idx in range(tile_layers.size(), 0, -1):
+	var tile_coords
+	if event is InputEventMouse:
+		if flower_highlight != null:
+			flower_highlight.modulate = ColorN("white")
+		for layer_idx in range(tile_layers.size(), 0, -1):
 				var layer_name = "Tile Layer " + str(layer_idx)
 				var layer = get_node(layer_name)
 				# which layer we call this on does not matter, but the layer's
@@ -333,9 +330,24 @@ func _input(event):
 						$"/root/Game/Camera2D".offset - \
 						layer.position
 						)
-				the_tile = get_tile_at_level(tile_coords, layer_idx)
+				var the_tile = get_tile_at_level(tile_coords, layer_idx)
 				if the_tile != -1:
 				# found the right coordinates, break (highlight would be nice)
 					break
-			objects.remove_objects(tile_coords)
+		var obj_array = objects.get_objects(tile_coords)
+		# Mouse over a flower!
+		if obj_array != null:
+			var new_flower_highlight = obj_array[0]
+#			flower_highlight.modulate = ColorN("white")
+			flower_highlight = new_flower_highlight
+			flower_highlight.modulate = ColorN("black")
+			if event is InputEventMouseButton:
+				flower_highlight = null
+				if event.button_index == BUTTON_LEFT and event.pressed:
+					if Globals.paused:
+						Globals.paused = false
+						return
+					$"/root/Game/Audio/select".play()
+					flower_highlight
+					objects.remove_objects(tile_coords)
 		
