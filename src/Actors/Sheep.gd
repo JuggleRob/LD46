@@ -117,6 +117,7 @@ func idle_ends():
 # finds a next jump and keeps sprite accurate
 func jump_ends():
 	Globals.distance_covered += 1
+	stomach -= 1
 	$"/root/Game/UI/steps".text = "Steps: " + str(Globals.distance_covered)
 	if Globals.game_over:
 		return
@@ -141,7 +142,7 @@ func die():
 
 func _process(delta):
 	if not Globals.game_over:
-		stomach = max(0, stomach - delta * hunger_rate)
+		#stomach = max(0, stomach - delta * hunger_rate)
 		if eat_countdown > 0:
 			eat_countdown = max(0, eat_countdown - delta)
 			stomach = min(max_stomach, stomach + delta * eat_rate)
