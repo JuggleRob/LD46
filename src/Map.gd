@@ -72,6 +72,8 @@ func _ready():
 	var startrect = startpos_node.position
 	startpos = Globals.tiled_to_diam(startrect)
 	$"/root/Game/Schaap".set_coords(startpos)
+	$"/root/Game/Schaap".set_move_dir(Vector2(0, 1))
+	$"/root/Game/Schaap".set_move_dir(Vector2(0, 0))
 	random_flowers()
 	$Flowers.visible = false
 	$Other.visible = false
@@ -80,7 +82,9 @@ func is_water(tile_id):
 	return tile_id == 13 or tile_id == 14
 
 func spawn_flower(coords):
-	if objects.get_objects(coords) != null or coords == $"/root/Game/Schaap".diam_coords:
+	if objects.get_objects(coords) != null or \
+			coords == $"/root/Game/Schaap".diam_coords or \
+			coords == $"/root/Game/Schaap".diam_coords + $"/root/Game/Schaap".face_dir:
 		return # tile is occupied
 	var flower = Flower_scene.instance()
 	if randf() > Globals.difficulty:
