@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://src/Game/AnimatedSprite.gd" type="Script" id=1]
 [ext_resource path="res://src/Game/Game.gd" type="Script" id=2]
@@ -13,6 +13,7 @@
 [ext_resource path="res://assets/sound/bg.ogg" type="AudioStream" id=12]
 [ext_resource path="res://assets/sound/death01.wav" type="AudioStream" id=13]
 [ext_resource path="res://src/UI/score.tscn" type="PackedScene" id=14]
+[ext_resource path="res://src/UI/flowers_eaten.tscn" type="PackedScene" id=15]
 [ext_resource path="res://assets/font/text_default.tres" type="DynamicFont" id=16]
 [ext_resource path="res://assets/health_bar.png" type="Texture" id=17]
 [ext_resource path="res://src/Game/healthbar.gd" type="Script" id=18]
@@ -61,16 +62,13 @@ script = ExtResource( 7 )
 [node name="Schaap" parent="." instance=ExtResource( 6 )]
 position = Vector2( 0, 50 )
 z_as_relative = false
-max_stomach = 25
-stomach = 25
-eat_rate = 5
-poison_rate = 4
 
 [node name="Map" parent="." instance=ExtResource( 8 )]
 script = ExtResource( 4 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
+smoothing_enabled = true
 script = ExtResource( 3 )
 
 [node name="UI" type="CanvasLayer" parent="."]
@@ -89,6 +87,18 @@ margin_right = -9.77673
 margin_bottom = 0.0
 custom_fonts/font = ExtResource( 16 )
 text = "Steps:  0"
+
+[node name="flowers_eaten" parent="UI" instance=ExtResource( 15 )]
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 0.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = -15.0
+margin_right = 91.0
+margin_bottom = 0.0
+custom_fonts/font = ExtResource( 16 )
+text = "Flowers eaten: 0"
 
 [node name="healthbar" type="TileMap" parent="UI"]
 tile_set = SubResource( 1 )

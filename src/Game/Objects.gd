@@ -45,6 +45,8 @@ func eat_at_coords(coords, eater):
 					if eater.stomach <= 0:
 						eater.die()
 				obj_array.erase(obj)
+				if obj == $"/root/Game/Map".flower_highlight:
+					$"/root/Game/Map".flower_highlight = null
 				obj.queue_free()
 		if obj_array.size() == 0:
 			objects.erase(coords)
