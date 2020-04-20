@@ -35,10 +35,10 @@ func eat_at_coords(coords, eater):
 			if obj is Flower:
 				Globals.flowers_eaten += 1
 				if obj.animation == "flower_good":
-					$flower_good.play()
+#					$flower_good.play()
 					eater.eat_countdown = eater.eat_duration
 				elif obj.animation == "flower_bad":
-					$flower_bad.play()
+#					$flower_bad.play()
 					eater.stomach = max(0, eater.stomach - eater.poison_rate)
 					eater.emit_signal("update_stomach", eater.stomach)
 					if eater.stomach <= 0:

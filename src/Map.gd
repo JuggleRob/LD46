@@ -81,7 +81,7 @@ func spawn_flowers():
 				new_flower.set_animation("flower_good")
 			else:
 				new_flower.set_animation("flower_bad")
-			$"/root/Game/Objects".add_object(diam_coords, new_flower)
+			objects.add_object(diam_coords, new_flower)
 	$Flowers.visible = false
 	$Other.visible = false
 
