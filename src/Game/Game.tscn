@@ -87,7 +87,6 @@ text = "Flowers eaten: 0"
 [node name="background" type="AudioStreamPlayer2D" parent="Audio"]
 stream = ExtResource( 12 )
 volume_db = 1.0
-autoplay = true
 
 [node name="flower_good" type="AudioStreamPlayer2D" parent="Audio"]
 stream = ExtResource( 11 )

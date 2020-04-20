@@ -39,6 +39,10 @@ var side_types = {
 	20: [EMPTY, EMPTY, EMPTY, EMPTY]
 }
 
+var fertypes = [1, 19] # tile types on which flowers can grow
+# dictionary with coordinates => level of all (top-level) fertile tiles
+var fertiles = {}
+
 func _ready():
 	randomize()
 	globals = get_node("/root/Globals")
@@ -47,21 +51,24 @@ func _ready():
 	globals.patch_size = max(globals.screen_size.x / globals.grid_size.x, globals.screen_size.y / globals.grid_size.y)
 	if int(globals.patch_size) % 2 == 0:
 		globals.patch_size += 1
-	rect_patch_offset = Vector2(0, 0)
-#	generate_patches(Vector2(0, 0))
 	var tile_layer_basename = "Tile Layer "
 	for c in get_child_count():
 		var maybe_tile_layer = get_node_or_null(tile_layer_basename + str(c))
 		if maybe_tile_layer != null:
 			tile_layers.append(maybe_tile_layer)
-	spawn_flowers()
+			for cell_coords in maybe_tile_layer.get_used_cells():
+				var tile = get_tile_at_level(cell_coords, c)
+				if tile in fertypes:
+					if not cell_coords in fertiles:
+						fertiles[cell_coords] = c
+
+	random_flowers()
 	var startpos_node = $"Other/Startpos".get_child(0)
 	var startrect = startpos_node.position
 	var startpos = Globals.tiled_to_diam(startrect)
-	print("positions")
-	print(startrect)
-	print(startpos)
 	$"/root/Game/Schaap".set_coords(startpos)
+	$Flowers.visible = false
+	$Other.visible = false
 
 func is_water(tile_id):
 	return tile_id == 13 or tile_id == 14
@@ -82,32 +89,21 @@ func spawn_flowers():
 			else:
 				new_flower.set_animation("flower_bad")
 			objects.add_object(diam_coords, new_flower)
-	$Flowers.visible = false
-	$Other.visible = false
 
 # spawn flowers on existing tiles, in a 60x60 area around the origin.
 func random_flowers():
-# maybe add a flower:
-#	var layers = self.get_children()
-	for x in range(-30, 30):
-		for y in range(-30, 30):
-			for layer_idx in range(tile_layers.size(), 0, -1):
-				var layer = tile_layers[layer_idx - 1]
-				var tile_type = layer.get_cell(x, y)
-				if tile_type != -1 and not is_water(tile_type):
-					if randi() % 8 == 0:
-						var flower = Flower_scene.instance()
-						if randf() > 0.5:
-							flower.animation = "flower_good"
-						else:
-							flower.animation = "flower_bad"
-						flower.set_random_frame()
-						var flower_coords = Vector2(x, y)
-						flower.set_coords(flower_coords, layer_idx)
-						$"/root/Game/Objects".add_object(flower_coords, flower)
-					# found the top tile, don't process lower ones
-					break
-					
+	for flower_coords in fertiles.keys():
+		if randi() % 8 == 0:
+			var flower = Flower_scene.instance()
+			if randf() > 0.5:
+				flower.animation = "flower_good"
+			else:
+				flower.animation = "flower_bad"
+			flower.set_random_frame()
+			var layer_idx = fertiles[flower_coords]
+			flower.set_coords(flower_coords, layer_idx)
+			$"/root/Game/Objects".add_object(flower_coords, flower)
+	
 #	if cell_idxs.y == 2 and cell_idxs.x == 4 or \
 #		cell_idxs.y == 2 and cell_idxs.x == -3:
 #		if base_layer.get_cell(cell_idxs.x, cell_idxs.y) != 14:
