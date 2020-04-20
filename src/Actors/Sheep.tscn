@@ -1,4 +1,4 @@
-[gd_scene load_steps=78 format=2]
+[gd_scene load_steps=79 format=2]
 
 [ext_resource path="res://assets/sheep_se_jump_Sheet.png" type="Texture" id=1]
 [ext_resource path="res://src/Actors/Sheep.gd" type="Script" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://assets/sheep_se_death.png" type="Texture" id=4]
 [ext_resource path="res://assets/sheep_ne_jump.png" type="Texture" id=5]
 [ext_resource path="res://assets/sheep_ne_chew.png" type="Texture" id=6]
+[ext_resource path="res://assets/sound/death01.wav" type="AudioStream" id=7]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -352,6 +353,9 @@ anims/up = SubResource( 3 )
 [node name="sprite" type="AnimatedSprite" parent="AnimationPlayer"]
 frames = SubResource( 71 )
 animation = "idle_ne"
-frame = 6
+frame = 15
 playing = true
+
+[node name="death_sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 7 )
 [connection signal="animation_finished" from="AnimationPlayer/sprite" to="." method="_on_sprite_animation_finished"]
