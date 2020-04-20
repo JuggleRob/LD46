@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://assets/font/theme.tres" type="Theme" id=1]
 [ext_resource path="res://src/UI/play_button.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/Screens/StartScreen.gd" type="Script" id=3]
+[ext_resource path="res://src/Flowers/Flower.tscn" type="PackedScene" id=4]
+[ext_resource path="res://assets/Sheep_animated.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/start screen.png" type="Texture" id=6]
 
 [node name="StartScreen" type="Control"]
 anchor_right = 1.0
@@ -22,14 +25,18 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="title" type="Label" parent="."]
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 112, 112 )
+texture = ExtResource( 6 )
+
+[node name="By Jelle, Rob, Daniel -2020" type="Label" parent="."]
 anchor_left = 0.5
 anchor_right = 0.5
-margin_left = -50.5
-margin_top = 32.0751
-margin_right = 50.5
-margin_bottom = 46.0751
-text = "Sheep Halloumi"
+margin_left = -107.0
+margin_top = 207.0
+margin_right = 5.0
+margin_bottom = 268.0
+text = "By: Jelle, Rob, Daniel "
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -37,8 +44,73 @@ __meta__ = {
 [node name="play_button" parent="." instance=ExtResource( 2 )]
 anchor_left = 0.5
 anchor_right = 0.5
-margin_left = -55.6033
-margin_top = 62.6407
-margin_right = -17.6033
-margin_bottom = 82.6407
+margin_left = 10.0
+margin_top = 158.0
+margin_right = 48.0
+margin_bottom = 178.0
+rect_scale = Vector2( 2, 2 )
 text = "Play"
+
+[node name="sprite" parent="." instance=ExtResource( 5 )]
+position = Vector2( 41, 110 )
+animation = "idle"
+frame = 2
+
+[node name="sprite2" parent="." instance=ExtResource( 5 )]
+position = Vector2( 139, 104 )
+animation = "idle"
+frame = 12
+
+[node name="sprite3" parent="." instance=ExtResource( 5 )]
+position = Vector2( 67, 181 )
+frame = 14
+
+[node name="sprite4" parent="." instance=ExtResource( 5 )]
+position = Vector2( 69, 13 )
+animation = "idle"
+frame = 13
+
+[node name="sprite5" parent="." instance=ExtResource( 5 )]
+position = Vector2( 188, 83 )
+frame = 14
+flip_h = true
+
+[node name="sprite6" parent="." instance=ExtResource( 5 )]
+position = Vector2( 138, 201 )
+frame = 4
+
+[node name="sprite7" parent="." instance=ExtResource( 5 )]
+position = Vector2( 175, 15 )
+scale = Vector2( 2, 2 )
+animation = "idle"
+frame = 14
+flip_h = true
+
+[node name="Flower" parent="." instance=ExtResource( 4 )]
+position = Vector2( 156, 170 )
+animation = "flower_good"
+frame = 3
+
+[node name="Flower" parent="Flower" instance=ExtResource( 4 )]
+position = Vector2( -29, 0 )
+animation = "flower_good"
+frame = 3
+
+[node name="Flower2" parent="Flower" instance=ExtResource( 4 )]
+position = Vector2( 29, 0 )
+animation = "flower_good"
+frame = 5
+
+[node name="Flower3" parent="Flower" instance=ExtResource( 4 )]
+position = Vector2( 44, 16 )
+animation = "flower_good"
+frame = 7
+
+[node name="Flower4" parent="Flower" instance=ExtResource( 4 )]
+position = Vector2( -38, 16 )
+animation = "flower_good"
+frame = 9
+
+[node name="Flower5" parent="Flower" instance=ExtResource( 4 )]
+position = Vector2( 30, 38 )
+animation = "flower_good"
