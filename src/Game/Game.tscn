@@ -1,10 +1,9 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://src/Game/AnimatedSprite.gd" type="Script" id=1]
 [ext_resource path="res://src/Game/Game.gd" type="Script" id=2]
 [ext_resource path="res://src/Camera2D.gd" type="Script" id=3]
 [ext_resource path="res://src/Map.gd" type="Script" id=4]
-[ext_resource path="res://src/Game/Stomach.gd" type="Script" id=5]
 [ext_resource path="res://src/Actors/Sheep.tscn" type="PackedScene" id=6]
 [ext_resource path="res://src/Game/Objects.gd" type="Script" id=7]
 [ext_resource path="res://assets/levels/testlevel_02.tmx" type="PackedScene" id=8]
@@ -16,6 +15,38 @@
 [ext_resource path="res://src/UI/score.tscn" type="PackedScene" id=14]
 [ext_resource path="res://src/UI/flowers_eaten.tscn" type="PackedScene" id=15]
 [ext_resource path="res://assets/font/text_default.tres" type="DynamicFont" id=16]
+[ext_resource path="res://assets/health_bar.png" type="Texture" id=17]
+[ext_resource path="res://src/Game/healthbar.gd" type="Script" id=18]
+
+[sub_resource type="TileSet" id=1]
+0/name = "life"
+0/texture = ExtResource( 17 )
+0/tex_offset = Vector2( 0, 0 )
+0/modulate = Color( 1, 1, 1, 1 )
+0/region = Rect2( 1, 0, 8, 15 )
+0/tile_mode = 0
+0/occluder_offset = Vector2( 0, 0 )
+0/navigation_offset = Vector2( 0, 0 )
+0/shape_offset = Vector2( 0, 0 )
+0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+0/shape_one_way = false
+0/shape_one_way_margin = 0.0
+0/shapes = [  ]
+0/z_index = 0
+1/name = "anti_life"
+1/texture = ExtResource( 17 )
+1/tex_offset = Vector2( 0, 0 )
+1/modulate = Color( 1, 1, 1, 1 )
+1/region = Rect2( 9, 0, 8, 15 )
+1/tile_mode = 0
+1/occluder_offset = Vector2( 0, 0 )
+1/navigation_offset = Vector2( 0, 0 )
+1/shape_offset = Vector2( 0, 0 )
+1/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+1/shape_one_way = false
+1/shape_one_way_margin = 0.0
+1/shapes = [  ]
+1/z_index = 0
 
 [node name="Game" type="Control"]
 script = ExtResource( 2 )
@@ -39,21 +70,6 @@ current = true
 script = ExtResource( 3 )
 
 [node name="UI" type="CanvasLayer" parent="."]
-
-[node name="Stomach" type="ProgressBar" parent="UI"]
-anchor_left = 0.5
-anchor_right = 0.5
-margin_left = -45.5
-margin_right = 45.5
-margin_bottom = 14.0
-max_value = 65.0
-step = 1.0
-value = 65.0
-percent_visible = false
-script = ExtResource( 5 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="UI"]
 script = ExtResource( 1 )
@@ -81,6 +97,12 @@ margin_right = 91.0
 margin_bottom = 0.0
 custom_fonts/font = ExtResource( 16 )
 text = "Flowers eaten: 0"
+
+[node name="healthbar" type="TileMap" parent="UI"]
+tile_set = SubResource( 1 )
+cell_size = Vector2( 6, 2 )
+format = 1
+script = ExtResource( 18 )
 
 [node name="Audio" type="Node" parent="."]
 

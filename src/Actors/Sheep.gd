@@ -4,11 +4,11 @@ signal update_stomach
 signal show_game_over
 
 var path
-var max_stomach = 65
-var stomach = 65
-var hunger_rate = 3
-var eat_rate = 15
-var poison_rate = 20
+export var max_stomach = 15
+export var stomach = 15
+var hunger_rate = 1
+var eat_rate = 3
+var poison_rate = 1
 var eat_countdown = 0
 var eat_duration = 1
 var move_dir
@@ -126,7 +126,7 @@ func jump_ends():
 		return
 	$"/root/Game/Map".maybe_spawn_flowers()
 	idle_ends()
-	stomach = max(0, stomach - hunger_rate)
+	#stomach = max(0, stomach - hunger_rate)
 	emit_signal("update_stomach", stomach)
 	if stomach <= 0:
 		die()
