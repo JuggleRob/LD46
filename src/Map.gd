@@ -8,6 +8,7 @@ var objects
 var obj_layer
 var tile_layers = []
 var startpos
+var camera
 
 var Flower_scene = preload("res://src/Flowers/Flower.tscn")
 
@@ -49,6 +50,7 @@ func _ready():
 	randomize()
 	globals = get_node("/root/Globals")
 	objects = $"/root/Game/Objects"
+	camera = get_node("/root/Game/Camera2D")
 	globals.rows_and_cols = globals.screen_size / globals.grid_size
 	globals.patch_size = max(globals.screen_size.x / globals.grid_size.x, globals.screen_size.y / globals.grid_size.y)
 	if int(globals.patch_size) % 2 == 0:
@@ -78,7 +80,7 @@ func is_water(tile_id):
 	return tile_id == 13 or tile_id == 14
 
 func spawn_flower(coords):
-	if objects.get_objects(coords) != null:
+	if objects.get_objects(coords) != null or coords == $"/root/Game/Schaap".diam_coords:
 		return # tile is occupied
 	var flower = Flower_scene.instance()
 	if randf() > Globals.difficulty:
@@ -110,15 +112,7 @@ func spawn_flowers():
 func random_flowers():
 	for flower_coords in fertiles.keys():
 		if randi() % 8 == 0:
-			var flower = Flower_scene.instance()
-			if randf() > 0.5:
-				flower.animation = "flower_good"
-			else:
-				flower.animation = "flower_bad"
-			flower.set_random_frame()
-			var layer_idx = fertiles[flower_coords]
-			flower.set_coords(flower_coords, layer_idx)
-			$"/root/Game/Objects".add_object(flower_coords, flower)
+			spawn_flower(flower_coords)
 
 func flower_count_around(coords, range_param = 3):
 	var flower_count = 0
@@ -163,7 +157,7 @@ func generate_patches(diamond_patch_offset):
 			patches_covered.append(neighbor_offset)
 
 func _process(delta):
-	var camera_pos = get_node("/root/Game/Camera2D").offset
+	var camera_pos = camera.offset
 	var new_rect_patch_offset = Vector2(floor(0.5 + (camera_pos.x / (globals.patch_size * globals.grid_size.x))), floor(0.5 + (camera_pos.y / (globals.patch_size * globals.grid_size.y))))
 	if new_rect_patch_offset != rect_patch_offset:
 		rect_patch_offset = new_rect_patch_offset

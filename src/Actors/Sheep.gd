@@ -142,6 +142,8 @@ func _input(event):
 	if event.is_action_pressed("ui_accept") and Globals.paused:
 		Globals.paused = false
 		set_move_dir(Vector2(0, 1))
+#	if even.is_action_pressed("fullscreen"):
+#		$"/root/Game/Camera2D"
 
 func _on_sprite_animation_finished():
 	var anim = $AnimationPlayer/sprite.animation
