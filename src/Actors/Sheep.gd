@@ -6,9 +6,9 @@ signal show_game_over
 var path
 export var max_stomach = 15
 export var stomach = 15
-var hunger_rate = 1
-var eat_rate = 3
-var poison_rate = 1
+export var hunger_rate = 1
+export var eat_rate = 3
+export var poison_rate = 1
 var eat_countdown = 0
 var eat_duration = 1
 var move_dir

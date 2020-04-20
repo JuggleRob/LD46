@@ -35,7 +35,6 @@ func eat_at_coords(coords, eater):
 		for obj in obj_array:
 			if obj is Flower:
 				Globals.flowers_eaten += 1
-				$"/root/Game/UI/flowers_eaten".text = "Flowers eaten: " + str(Globals.flowers_eaten)
 				if obj.animation == "flower_good":
 					$"/root/Game/Audio/flower_good".play()
 					eater.stomach = min(eater.max_stomach, eater.stomach + eater.eat_rate)
