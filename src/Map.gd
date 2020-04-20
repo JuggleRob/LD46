@@ -68,11 +68,11 @@ func _ready():
 				elif tile in fertypes:
 					fertiles[cell_coords] = c
 	fertile_array = fertiles.keys()
-	random_flowers()
 	var startpos_node = $"Other/Startpos".get_child(0)
 	var startrect = startpos_node.position
 	startpos = Globals.tiled_to_diam(startrect)
 	$"/root/Game/Schaap".set_coords(startpos)
+	random_flowers()
 	$Flowers.visible = false
 	$Other.visible = false
 
