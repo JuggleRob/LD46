@@ -41,3 +41,4 @@ script = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+[connection signal="show_game_over" from="Schaap" to="." method="_on_Schaap_show_game_over"]

@@ -20,7 +20,6 @@ func set_coords(diam_coords, level = null):
 		for lvl_idx in range(levels.size() - 1, -1, -1):
 			var lowest_cell = levels[lvl_idx].get_cell(diam_coords.x, diam_coords.y)
 			if lowest_cell != -1:
-				print(lowest_cell)
 				self.current_level = lvl_idx + 1
 				break
 	height_offset = Globals.height_offset_base + current_level * Vector2(0, -7)

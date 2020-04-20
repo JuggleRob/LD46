@@ -8,6 +8,35 @@ var objects
 
 var Flower_scene = preload("res://src/Flowers/Flower.tscn")
 
+var HIGH = 0
+var LOW = 1
+var CW_DOWN = 2
+var CW_UP = 3
+var WATER = 4
+var EMPTY = 5
+var side_types = {
+	1: [HIGH, HIGH, HIGH, HIGH],
+	2: [CW_DOWN, LOW, CW_UP, HIGH],
+	3: [HIGH, CW_DOWN, LOW, CW_UP],
+	4: [CW_DOWN, CW_UP, HIGH, HIGH],
+	5: [HIGH, CW_DOWN, CW_UP, HIGH],
+	6: [LOW, CW_UP, HIGH, CW_DOWN],
+	7: [CW_UP, HIGH, CW_DOWN, LOW],
+	8: [HIGH, HIGH, CW_DOWN, CW_UP],
+	9: [CW_DOWN, LOW, LOW, CW_UP],
+	10: [CW_UP, CW_DOWN, LOW, LOW],
+	11: [LOW, LOW, CW_UP, CW_DOWN],
+	12: [EMPTY, EMPTY, EMPTY, EMPTY],
+	13: [WATER, WATER, WATER, WATER],
+	14: [WATER, WATER, WATER, WATER],
+	15: [HIGH, HIGH, HIGH, HIGH],
+	16: [EMPTY, EMPTY, EMPTY, EMPTY],
+	17: [WATER, HIGH, WATER, HIGH],
+	18: [HIGH, WATER, HIGH, WATER],
+	19: [HIGH, HIGH, HIGH, HIGH],
+	20: [EMPTY, EMPTY, EMPTY, EMPTY]
+}
+
 func _ready():
 	randomize()
 	globals = get_node("/root/Globals")
@@ -19,6 +48,9 @@ func _ready():
 	rect_patch_offset = Vector2(0, 0)
 #	generate_patches(Vector2(0, 0))
 	spawn_flowers()
+
+func is_water(tile_id):
+	return tile_id == 13 or tile_id == 14
 
 # spawn flowers on existing tiles, in a 60x60 area around the origin.
 func spawn_flowers():
@@ -113,7 +145,11 @@ func top_level(coords):
 			return lvl_idx
 	return -1
 
-func get_tile(coords, lvl):
+func get_tile(coords):
+	var tl = top_level(coords)
+	return get_tile_at_level(coords, tl)
+
+func get_tile_at_level(coords, lvl):
 	var layer_name = "Tile Layer " + str(lvl)
 	var layer = get_node(layer_name)
 	return layer.get_cell(coords.x, coords.y)
@@ -134,53 +170,25 @@ func reachable(src, tgt):
 	elif dir == Vector2(-1, 0):
 		side_src_idx = 3
 	var side_tgt_idx = (side_src_idx + 2) % 4
-	var HIGH = 0
-	var LOW = 1
-	var CW_DOWN = 2
-	var CW_UP = 3
-	var WATER = 4
-	var EMPTY = 5
-	var side_types = {
-		1: [HIGH, HIGH, HIGH, HIGH],
-		2: [CW_DOWN, LOW, CW_UP, HIGH],
-		3: [HIGH, CW_DOWN, LOW, CW_UP],
-		4: [CW_DOWN, CW_UP, HIGH, HIGH],
-		5: [HIGH, CW_DOWN, CW_UP, HIGH],
-		6: [LOW, CW_UP, HIGH, CW_DOWN],
-		7: [CW_UP, HIGH, CW_DOWN, LOW],
-		8: [HIGH, HIGH, CW_DOWN, CW_UP],
-		9: [CW_DOWN, LOW, LOW, CW_UP],
-		10: [CW_UP, CW_DOWN, LOW, LOW],
-		11: [LOW, LOW, CW_UP, CW_DOWN],
-		12: [EMPTY, EMPTY, EMPTY, EMPTY],
-		13: [WATER, WATER, WATER, WATER],
-		14: [WATER, WATER, WATER, WATER],
-		15: [HIGH, HIGH, HIGH, HIGH],
-		16: [EMPTY, EMPTY, EMPTY, EMPTY],
-		17: [WATER, HIGH, WATER, HIGH],
-		18: [HIGH, WATER, HIGH, WATER],
-		19: [HIGH, HIGH, HIGH, HIGH],
-		20: [EMPTY, EMPTY, EMPTY, EMPTY]
-	}
 	var conn_same = {
-		HIGH: [HIGH],
-		LOW: [LOW],
+		HIGH: [HIGH, WATER],
+		LOW: [LOW, WATER],
 		CW_DOWN: [CW_UP],
 		CW_UP: [CW_DOWN],
 		WATER: [],
 		EMPTY: []
 	}
 	var conn_up = {
-		HIGH: [LOW],
-		LOW: [],
+		HIGH: [LOW, WATER],
+		LOW: [WATER],
 		CW_DOWN: [],
 		CW_UP: [],
 		WATER: [],
 		EMPTY: []
 	}
 	var conn_down = {
-		HIGH: [],
-		LOW: [HIGH],
+		HIGH: [WATER],
+		LOW: [HIGH, WATER],
 		CW_DOWN: [],
 		CW_UP: [],
 		WATER: [],
@@ -192,8 +200,8 @@ func reachable(src, tgt):
 	if abs(src_lvl - tgt_lvl) > 1 or src_lvl == -1 or tgt_lvl == -1:
 		return false
 	else:
-		var src_tile = get_tile(src, src_lvl)
-		var tgt_tile = get_tile(tgt, tgt_lvl)
+		var src_tile = get_tile_at_level(src, src_lvl)
+		var tgt_tile = get_tile_at_level(tgt, tgt_lvl)
 		var src_side = side_types[src_tile][side_src_idx]
 		var tgt_side = side_types[tgt_tile][side_tgt_idx]
 		if tgt_lvl == src_lvl + 1:
@@ -261,12 +269,29 @@ func bfs(src: Vector2, tgt = null):
 	return paths_to_targets(checked_nodes, flower_nodes)
 
 func _input(event):
-	if event is InputEventMouseButton and \
-			event.button_index == BUTTON_LEFT and \
-			event.pressed:
-		var tile_coords = $"Tile Layer 1".world_to_map( \
-				event.position - \
-				0.5 * Globals.screen_size - \
-				Globals.mouse_offset + \
-				$"/root/Game/Camera2D".offset)
-		objects.remove_objects(tile_coords)
+	if event is InputEventMouseButton:
+		if event.button_index == BUTTON_LEFT and event.pressed:
+			var tile_coords
+			var the_tile
+			for layer_idx in range(self.get_children().size(), 0, -1):
+				var layer_name = "Tile Layer " + str(layer_idx)
+				var layer = get_node(layer_name)
+				# which layer we call this on does not matter, but the layer's
+				# position (in the argument) does.
+				tile_coords = layer.world_to_map( \
+						event.position - \
+						0.5 * Globals.screen_size - \
+						Globals.mouse_offset + \
+						$"/root/Game/Camera2D".offset - \
+						layer.position
+						)
+				the_tile = get_tile_at_level(tile_coords, layer_idx)
+				print("layer idx " + str(layer_idx))
+				print("tile " + str(the_tile))
+				print("coords " + str(tile_coords))
+				if the_tile != -1:
+				# found the right coordinates, break (highlight would be nice)
+					break
+			print(tile_coords)
+			objects.remove_objects(tile_coords)
+		

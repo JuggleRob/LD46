@@ -1,10 +1,9 @@
 extends Actor
 
 signal update_stomach
+signal show_game_over
 
-var destination # diamond coordinates of immediately next tile to move to
 var path
-var next_path_node
 var stomach = 100
 var hunger_rate = 1
 var eat_rate = 30
@@ -44,14 +43,18 @@ func set_move_dir(move_vector_diam):
 
 func set_coords(coords, level = 0):
 	.set_coords(coords)
-	print(self.height_offset)
 	$AnimationPlayer/sprite.offset = self.position
 
-# finds a path, sets destination and keeps sprite accurate
+# finds a next jump and keeps sprite accurate
 func jump_ends():
 	if Globals.game_over:
 		return
 	self.set_coords(self.diam_coords + self.move_dir)
+	# Die if in water
+	var maybe_water = $"/root/Game/Map".get_tile(self.diam_coords)
+	if $"/root/Game/Map".is_water(maybe_water):
+		die()
+		return
 	# Eat flowers, if any
 	objects.eat_at_coords(self.diam_coords, self)
 	if move_dir == Vector2(0, 0):
@@ -110,13 +113,10 @@ func jump_ends():
 #		set_move_dir(Vector2(0, -1))
 
 func die():
-	print("dying?")
-	destination = null
 	path = null
-	next_path_node = null
 	set_move_dir(Vector2(0, 0))
 	Globals.game_over = true
-	get_tree().change_scene("res://src/Screens/EndScreen.tscn")
+	$AnimationPlayer/sprite.animation = "death"
 
 func _process(delta):
 	if not Globals.game_over:
@@ -131,3 +131,12 @@ func _process(delta):
 func _input(event):
 	if event.is_action_pressed("ui_accept"):
 		set_move_dir(Vector2(0, -1))
+
+
+func _on_sprite_animation_finished():
+	var anim = $AnimationPlayer/sprite.animation
+	if anim == "up" or anim == "down":
+		jump_ends()
+	elif anim == "death":
+		emit_signal("show_game_over")
+		
