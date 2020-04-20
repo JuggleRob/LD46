@@ -56,11 +56,12 @@ func is_water(tile_id):
 func spawn_flowers():
 # maybe add a flower:
 	var layers = self.get_children()
-	for x in range(-8, 8):
-		for y in range(-4, 4):
+	for x in range(-30, 30):
+		for y in range(-30, 30):
 			for layer_idx in range(layers.size(), 0, -1):
 				var layer = layers[layer_idx - 1]
-				if layer.get_cell(x, y) != -1:
+				var tile_type = layer.get_cell(x, y)
+				if tile_type != -1 and not is_water(tile_type):
 					if randi() % 8 == 0:
 						var flower = Flower_scene.instance()
 						if randf() > 0.5:
@@ -175,7 +176,7 @@ func reachable(src, tgt):
 		LOW: [LOW, WATER],
 		CW_DOWN: [CW_UP],
 		CW_UP: [CW_DOWN],
-		WATER: [],
+		WATER: [HIGH, LOW],
 		EMPTY: []
 	}
 	var conn_up = {
@@ -183,7 +184,7 @@ func reachable(src, tgt):
 		LOW: [WATER],
 		CW_DOWN: [],
 		CW_UP: [],
-		WATER: [],
+		WATER: [HIGH, LOW],
 		EMPTY: []
 	}
 	var conn_down = {
@@ -191,7 +192,7 @@ func reachable(src, tgt):
 		LOW: [HIGH, WATER],
 		CW_DOWN: [],
 		CW_UP: [],
-		WATER: [],
+		WATER: [HIGH, LOW],
 		EMPTY: []
 	}
 	var src_lvl = top_level(src)
@@ -286,12 +287,8 @@ func _input(event):
 						layer.position
 						)
 				the_tile = get_tile_at_level(tile_coords, layer_idx)
-				print("layer idx " + str(layer_idx))
-				print("tile " + str(the_tile))
-				print("coords " + str(tile_coords))
 				if the_tile != -1:
 				# found the right coordinates, break (highlight would be nice)
 					break
-			print(tile_coords)
 			objects.remove_objects(tile_coords)
 		

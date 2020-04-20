@@ -4,14 +4,16 @@ signal update_stomach
 signal show_game_over
 
 var path
+var max_stomach = 65
 var stomach = 65
-var hunger_rate = 5
+var hunger_rate = 2
 var eat_rate = 30
+var poison_rate = 10
 var eat_countdown = 0
 var eat_duration = 1
 var move_dir
 var face_dir
-var sight = 5
+var sight = 4
 var objects
 var base_sprite_position
 var flip_offset = Vector2(-21, 0)
@@ -31,12 +33,12 @@ func set_move_dir(move_vector_diam):
 		face_dir = move_dir
 	var move_vector_rect = Globals.diam_to_rect(move_vector_diam)
 	if move_vector_rect == Vector2(0, 0):
-		$AnimationPlayer/sprite.animation = "idle"
+		$AnimationPlayer/sprite.set_animation("idle")
 	else:
 		if move_vector_rect.y >= 0:
-			$AnimationPlayer/sprite.animation = "jump_se"
+			$AnimationPlayer/sprite.set_animation("jump_se")
 		elif move_vector_rect.y < 0:
-			$AnimationPlayer/sprite.animation = "jump_ne"
+			$AnimationPlayer/sprite.set_animation("jump_ne")
 		if move_vector_rect.x  >= 0:
 			$AnimationPlayer/sprite.position = base_sprite_position
 			$AnimationPlayer/sprite.flip_h = false
@@ -46,10 +48,13 @@ func set_move_dir(move_vector_diam):
 
 func set_coords(coords, level = 0):
 	.set_coords(coords)
-	$AnimationPlayer/sprite.offset = self.position
+	$AnimationPlayer/sprite.set_offset(self.position)
 
 func idle_ends():
-	if Globals.game_over or Globals.paused:
+	if Globals.paused:
+		return
+	if Globals.game_over:
+		$AnimationPlayer/sprite.set_animation("death")
 		return
 	self.set_coords(self.diam_coords + self.move_dir)
 	# Die if in water
@@ -127,17 +132,18 @@ func jump_ends():
 #		set_move_dir(Vector2(0, -1))
 
 func die():
+	print("dying alright")
 	path = null
 	set_move_dir(Vector2(0, 0))
 	Globals.game_over = true
-	$AnimationPlayer/sprite.animation = "death"
+	$AnimationPlayer/sprite.set_animation("death")
 
 func _process(delta):
 	if not Globals.game_over:
 		stomach = max(0, stomach - delta * hunger_rate)
 		if eat_countdown > 0:
 			eat_countdown = max(0, eat_countdown - delta)
-			stomach = min(100, stomach + delta * eat_rate)
+			stomach = min(max_stomach, stomach + delta * eat_rate)
 		emit_signal("update_stomach", stomach)
 		if stomach <= 0:
 			die()
