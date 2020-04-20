@@ -136,7 +136,7 @@ func die():
 	set_move_dir(Vector2(0, 0))
 	Globals.game_over = true
 	$AnimationPlayer/sprite.set_animation("death")
-#	$death_sound.play()
+	$"/root/Game/Audio/death".play()
 
 func _process(delta):
 	if not Globals.game_over:

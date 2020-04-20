@@ -305,6 +305,7 @@ func bfs(src: Vector2, tgt = null):
 func _input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT and event.pressed:
+			$"/root/Game/Audio/select".play()
 			var tile_coords
 			var the_tile
 			for layer_idx in range(tile_layers.size(), 0, -1):
