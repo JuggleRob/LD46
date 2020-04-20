@@ -119,24 +119,17 @@ func idle_ends():
 # finds a next jump and keeps sprite accurate
 func jump_ends():
 	Globals.distance_covered += 1
+	Globals.difficulty = Globals.difficulty + 0.01 * (0.85 - Globals.difficulty)
 	stomach -= 1
 	$"/root/Game/UI/steps".text = "Steps: " + str(Globals.distance_covered)
 	if Globals.game_over:
 		return
+	$"/root/Game/Map".maybe_spawn_flowers()
 	idle_ends()
 	stomach = max(0, stomach - hunger_rate)
 	emit_signal("update_stomach", stomach)
 	if stomach <= 0:
 		die()
-#	var test = randi() % 4
-#	if test == 0:
-#		set_move_dir(Vector2(1, 0))
-#	elif test == 1:
-#		set_move_dir(Vector2(0, 1))
-#	elif test == 2:
-#		set_move_dir(Vector2(-1, 0))
-#	elif test == 3:
-#		set_move_dir(Vector2(0, -1))
 
 func die():
 	path = null

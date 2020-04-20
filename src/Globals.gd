@@ -14,6 +14,9 @@ const mouse_offset = Vector2(0, -21)
 var flowers_eaten = 0
 var distance_covered = 0
 
+# Proportion of red flowers spawning
+var difficulty = 0.4
+
 func rect_to_diam(v):
 	return Vector2(v.x + v.y, v.y - v.x)
 	
