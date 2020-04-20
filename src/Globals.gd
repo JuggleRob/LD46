@@ -7,8 +7,12 @@ const grid_size = Vector2(28, 14)
 var rows_and_cols = Vector2()
 var patch_size
 var game_over = false
+var paused = true
 const height_offset_base = Vector2(0, -5)
 const mouse_offset = Vector2(0, -21)
+
+var flowers_eaten = 0
+var distance_covered = 0
 
 func rect_to_diam(v):
 	return Vector2(v.x + v.y, v.y - v.x)

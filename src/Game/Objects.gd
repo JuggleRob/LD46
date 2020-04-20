@@ -33,6 +33,7 @@ func eat_at_coords(coords, eater):
 	if obj_array != null:
 		for obj in obj_array:
 			if obj is Flower:
+				Globals.flowers_eaten += 1
 				if obj.animation == "flower_good":
 					eater.eat_countdown = eater.eat_duration
 				elif obj.animation == "flower_bad":
@@ -44,3 +45,5 @@ func eat_at_coords(coords, eater):
 				obj.queue_free()
 		if obj_array.size() == 0:
 			objects.erase(coords)
+		return true
+	return false

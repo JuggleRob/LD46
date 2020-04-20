@@ -4,12 +4,13 @@ signal update_stomach
 signal show_game_over
 
 var path
-var stomach = 100
-var hunger_rate = 1
+var stomach = 65
+var hunger_rate = 5
 var eat_rate = 30
 var eat_countdown = 0
 var eat_duration = 1
 var move_dir
+var face_dir
 var sight = 5
 var objects
 var base_sprite_position
@@ -22,10 +23,12 @@ func _ready():
 	objects = $"/root/Game/Objects"
 	base_sprite_position = Vector2(10, -6)
 	$AnimationPlayer/sprite.position = base_sprite_position
-	
+	Globals.paused = true
 
 func set_move_dir(move_vector_diam):
 	move_dir = move_vector_diam
+	if move_dir != Vector2(0, 0):
+		face_dir = move_dir
 	var move_vector_rect = Globals.diam_to_rect(move_vector_diam)
 	if move_vector_rect == Vector2(0, 0):
 		$AnimationPlayer/sprite.animation = "idle"
@@ -45,9 +48,8 @@ func set_coords(coords, level = 0):
 	.set_coords(coords)
 	$AnimationPlayer/sprite.offset = self.position
 
-# finds a next jump and keeps sprite accurate
-func jump_ends():
-	if Globals.game_over:
+func idle_ends():
+	if Globals.game_over or Globals.paused:
 		return
 	self.set_coords(self.diam_coords + self.move_dir)
 	# Die if in water
@@ -56,10 +58,15 @@ func jump_ends():
 		die()
 		return
 	# Eat flowers, if any
-	objects.eat_at_coords(self.diam_coords, self)
-	if move_dir == Vector2(0, 0):
+	var eaten = objects.eat_at_coords(self.diam_coords, self)
+#	if move_dir == Vector2(0, 0):
+#		return
+	# Idle for a turn
+	if eaten:
+		set_move_dir(Vector2(0, 0))
 		return
-	# Decide next jump
+	# Done idling, decide next jump!
+	move_dir = face_dir
 	var left_dir = move_dir.rotated(-0.5 * PI)
 	left_dir = Vector2(round(left_dir.x), round(left_dir.y))
 	var right_dir = move_dir.rotated(0.5 * PI)
@@ -102,6 +109,13 @@ func jump_ends():
 				break
 		if backtrack:
 			set_move_dir(-move_dir)
+		
+# finds a next jump and keeps sprite accurate
+func jump_ends():
+	Globals.distance_covered += 1
+	if Globals.game_over:
+		return
+	idle_ends()
 #	var test = randi() % 4
 #	if test == 0:
 #		set_move_dir(Vector2(1, 0))
@@ -130,12 +144,14 @@ func _process(delta):
 
 func _input(event):
 	if event.is_action_pressed("ui_accept"):
-		set_move_dir(Vector2(0, -1))
-
+		Globals.paused = false
+		set_move_dir(Vector2(0, 1))
 
 func _on_sprite_animation_finished():
 	var anim = $AnimationPlayer/sprite.animation
-	if anim == "up" or anim == "down":
+	if anim == "idle":
+		idle_ends()
+	elif anim == "jump_se" or anim == "jump_ne":
 		jump_ends()
 	elif anim == "death":
 		emit_signal("show_game_over")
