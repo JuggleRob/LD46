@@ -54,7 +54,6 @@ __meta__ = {
 }
 
 [node name="Objects" type="YSort" parent="."]
-position = Vector2( 1, 1 )
 z_index = 1
 script = ExtResource( 7 )
 

@@ -46,12 +46,14 @@ var fertypes = [1, 19] # tile types on which flowers can grow
 # dictionary with coordinates => level of all (top-level) fertile tiles
 var fertiles = {}
 var fertile_array = []
+var sheep
 
 func _ready():
 	randomize()
-	globals = get_node("/root/Globals")
+	globals = $"/root/Globals"
 	objects = $"/root/Game/Objects"
-	camera = get_node("/root/Game/Camera2D")
+	camera = $"/root/Game/Camera2D"
+	sheep = $"/root/Game/Schaap"
 	globals.rows_and_cols = globals.screen_size / globals.grid_size
 	globals.patch_size = max(globals.screen_size.x / globals.grid_size.x, globals.screen_size.y / globals.grid_size.y)
 	if int(globals.patch_size) % 2 == 0:
@@ -72,9 +74,9 @@ func _ready():
 	var startpos_node = $"Other/Startpos".get_child(0)
 	var startrect = startpos_node.position
 	startpos = Globals.tiled_to_diam(startrect)
-	$"/root/Game/Schaap".set_coords(startpos)
-	$"/root/Game/Schaap".set_move_dir(Vector2(0, 1))
-	$"/root/Game/Schaap".set_move_dir(Vector2(0, 0))
+	sheep.set_coords(startpos)
+	sheep.set_move_dir(Vector2(0, 1))
+	sheep.set_move_dir(Vector2(0, 0))
 	random_flowers()
 	$Flowers.visible = false
 	$Other.visible = false
@@ -83,10 +85,21 @@ func is_water(tile_id):
 	return tile_id == 13 or tile_id == 14
 
 func spawn_flower(coords):
-	if objects.get_objects(coords) != null or \
-			coords == $"/root/Game/Schaap".diam_coords or \
-			coords == $"/root/Game/Schaap".diam_coords + $"/root/Game/Schaap".face_dir:
-		return # tile is occupied
+	var area_in_front = [] # 5x3 area in front of the sheep
+	var area_center = sheep.diam_coords + \
+			2 * sheep.face_dir
+	var right_dir = sheep.face_dir.rotated(0.5 * PI)
+	right_dir = Vector2(round(right_dir.x), round(right_dir.y))
+	for front_back in range(-2, 3):
+		for left_right in range(-1, 2):
+			area_in_front.append(area_center + \
+					front_back * sheep.face_dir + \
+					left_right * right_dir)
+	
+	if objects.get_objects(coords) != null \
+			or coords == sheep.diam_coords \
+			or coords in area_in_front:
+		return # tile is occupied/too close
 	var flower = Flower_scene.instance()
 	if randf() > Globals.difficulty:
 		flower.animation = "flower_good"
