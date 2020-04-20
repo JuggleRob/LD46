@@ -20,7 +20,6 @@ var flip_offset = Vector2(-21, 0)
 
 func _ready():
 	connect("update_stomach", $"/root/Game/UI/Stomach", "update_stomach")
-	set_coords(Vector2(0, 0))
 	set_move_dir(Vector2(0, 0))
 	objects = $"/root/Game/Objects"
 	base_sprite_position = Vector2(10, -6)

@@ -5,6 +5,8 @@ var patches_covered = []
 var patch_size = 3
 var rect_patch_offset
 var objects
+var obj_layer
+var tile_layers = []
 
 var Flower_scene = preload("res://src/Flowers/Flower.tscn")
 
@@ -47,19 +49,50 @@ func _ready():
 		globals.patch_size += 1
 	rect_patch_offset = Vector2(0, 0)
 #	generate_patches(Vector2(0, 0))
+	var tile_layer_basename = "Tile Layer "
+	for c in get_child_count():
+		var maybe_tile_layer = get_node_or_null(tile_layer_basename + str(c))
+		if maybe_tile_layer != null:
+			tile_layers.append(maybe_tile_layer)
 	spawn_flowers()
+	var startpos_node = $"Other/Startpos".get_child(0)
+	var startrect = startpos_node.position
+	var startpos = Globals.tiled_to_diam(startrect)
+	print("positions")
+	print(startrect)
+	print(startpos)
+	$"/root/Game/Schaap".set_coords(startpos)
 
 func is_water(tile_id):
 	return tile_id == 13 or tile_id == 14
 
-# spawn flowers on existing tiles, in a 60x60 area around the origin.
 func spawn_flowers():
+	print("spawning")
+	var good_tex_rect = $"Other/GoodFlower".get_child(0).region_rect
+	var bad_tex_rect = $"Other/BadFlower".get_child(0).region_rect
+	var flower_layers = get_node("Flowers").get_children()
+	for flower_layer in flower_layers:
+		var flower_children = flower_layer.get_children()
+		for flower_obj in flower_children:
+			print(flower_obj)
+			var diam_coords = Globals.tiled_to_diam(flower_obj.position)
+			var new_flower = Flower_scene.instance()
+			if flower_obj.region_rect == good_tex_rect:
+				new_flower.set_animation("flower_good")
+			else:
+				new_flower.set_animation("flower_bad")
+			$"/root/Game/Objects".add_object(diam_coords, new_flower)
+	$Flowers.visible = false
+	$Other.visible = false
+
+# spawn flowers on existing tiles, in a 60x60 area around the origin.
+func random_flowers():
 # maybe add a flower:
-	var layers = self.get_children()
+#	var layers = self.get_children()
 	for x in range(-30, 30):
 		for y in range(-30, 30):
-			for layer_idx in range(layers.size(), 0, -1):
-				var layer = layers[layer_idx - 1]
+			for layer_idx in range(tile_layers.size(), 0, -1):
+				var layer = tile_layers[layer_idx - 1]
 				var tile_type = layer.get_cell(x, y)
 				if tile_type != -1 and not is_water(tile_type):
 					if randi() % 8 == 0:
@@ -138,7 +171,7 @@ func paths_to_targets(visited, tgts):
 	return paths
 
 func top_level(coords):
-	for lvl_idx in range(self.get_children().size(), 0, -1):
+	for lvl_idx in range(tile_layers.size(), 0, -1):
 		var layer_name = "Tile Layer " + str(lvl_idx)
 		var layer = get_node(layer_name)
 		var tile = layer.get_cell(coords.x, coords.y)
@@ -272,10 +305,9 @@ func bfs(src: Vector2, tgt = null):
 func _input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT and event.pressed:
-			#$click_sound.play()
 			var tile_coords
 			var the_tile
-			for layer_idx in range(self.get_children().size(), 0, -1):
+			for layer_idx in range(tile_layers.size(), 0, -1):
 				var layer_name = "Tile Layer " + str(layer_idx)
 				var layer = get_node(layer_name)
 				# which layer we call this on does not matter, but the layer's

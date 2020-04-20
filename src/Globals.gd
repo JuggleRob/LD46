@@ -19,3 +19,8 @@ func rect_to_diam(v):
 	
 func diam_to_rect(v):
 	return 0.5 * Vector2(v.x - v.y, v.x + v.y)
+
+func tiled_to_diam(v):
+	print("converting...")
+	var converted = (v / Vector2(grid_size.y, grid_size.y))
+	return converted
