@@ -20,6 +20,7 @@ var flip_offset = Vector2(-21, 0)
 
 func _ready():
 	connect("update_stomach", $"/root/Game/UI/Stomach", "update_stomach")
+	face_dir = Vector2(0, 1)
 	set_move_dir(Vector2(0, 0))
 	objects = $"/root/Game/Objects"
 	base_sprite_position = Vector2(10, -6)
@@ -32,7 +33,10 @@ func set_move_dir(move_vector_diam):
 		face_dir = move_dir
 	var move_vector_rect = Globals.diam_to_rect(move_vector_diam)
 	if move_vector_rect == Vector2(0, 0):
-		$AnimationPlayer/sprite.set_animation("idle")
+		if Globals.diam_to_rect(face_dir).y < 0:
+			$AnimationPlayer/sprite.set_animation("idle_ne")
+		else:
+			$AnimationPlayer/sprite.set_animation("idle")
 	else:
 		if move_vector_rect.y >= 0:
 			$AnimationPlayer/sprite.set_animation("jump_se")
@@ -147,7 +151,7 @@ func _input(event):
 
 func _on_sprite_animation_finished():
 	var anim = $AnimationPlayer/sprite.animation
-	if anim == "idle":
+	if anim == "idle" or anim == "idle_ne":
 		idle_ends()
 	elif anim == "jump_se" or anim == "jump_ne":
 		jump_ends()

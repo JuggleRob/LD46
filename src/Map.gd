@@ -68,11 +68,11 @@ func _ready():
 				elif tile in fertypes:
 					fertiles[cell_coords] = c
 	fertile_array = fertiles.keys()
-	random_flowers()
 	var startpos_node = $"Other/Startpos".get_child(0)
 	var startrect = startpos_node.position
 	startpos = Globals.tiled_to_diam(startrect)
 	$"/root/Game/Schaap".set_coords(startpos)
+	random_flowers()
 	$Flowers.visible = false
 	$Other.visible = false
 
@@ -311,6 +311,9 @@ func bfs(src: Vector2, tgt = null):
 func _input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT and event.pressed:
+			if Globals.paused:
+				Globals.paused = false
+				return
 			$"/root/Game/Audio/select".play()
 			var tile_coords
 			var the_tile
