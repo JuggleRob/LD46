@@ -311,6 +311,9 @@ func bfs(src: Vector2, tgt = null):
 func _input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT and event.pressed:
+			if Globals.paused:
+				Globals.paused = false
+				return
 			$"/root/Game/Audio/select".play()
 			var tile_coords
 			var the_tile
