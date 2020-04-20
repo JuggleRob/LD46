@@ -352,6 +352,6 @@ anims/up = SubResource( 3 )
 [node name="sprite" type="AnimatedSprite" parent="AnimationPlayer"]
 frames = SubResource( 71 )
 animation = "idle_ne"
-frame = 11
+frame = 6
 playing = true
 [connection signal="animation_finished" from="AnimationPlayer/sprite" to="." method="_on_sprite_animation_finished"]
