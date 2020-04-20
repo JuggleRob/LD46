@@ -54,63 +54,63 @@ text = "Play"
 [node name="sprite" parent="." instance=ExtResource( 5 )]
 position = Vector2( 41, 110 )
 animation = "idle"
-frame = 0
+frame = 5
 
 [node name="sprite2" parent="." instance=ExtResource( 5 )]
 position = Vector2( 139, 104 )
 animation = "idle"
+frame = 5
 
 [node name="sprite3" parent="." instance=ExtResource( 5 )]
 position = Vector2( 67, 181 )
-frame = 12
+frame = 1
 
 [node name="sprite4" parent="." instance=ExtResource( 5 )]
 position = Vector2( 69, 13 )
 animation = "idle"
-frame = 11
+frame = 0
 
 [node name="sprite5" parent="." instance=ExtResource( 5 )]
 position = Vector2( 188, 83 )
-frame = 12
+frame = 1
 flip_h = true
 
 [node name="sprite6" parent="." instance=ExtResource( 5 )]
 position = Vector2( 138, 201 )
-frame = 2
+frame = 7
 
 [node name="sprite7" parent="." instance=ExtResource( 5 )]
 position = Vector2( 175, 15 )
 scale = Vector2( 2, 2 )
 animation = "idle"
-frame = 12
+frame = 1
 flip_h = true
 
 [node name="Flower" parent="." instance=ExtResource( 4 )]
 position = Vector2( 156, 170 )
 animation = "flower_good"
-frame = 1
+frame = 8
 
 [node name="Flower" parent="Flower" instance=ExtResource( 4 )]
 position = Vector2( -29, 0 )
 animation = "flower_good"
-frame = 1
+frame = 8
 
 [node name="Flower2" parent="Flower" instance=ExtResource( 4 )]
 position = Vector2( 29, 0 )
 animation = "flower_good"
-frame = 3
+frame = 0
 
 [node name="Flower3" parent="Flower" instance=ExtResource( 4 )]
 position = Vector2( 44, 16 )
 animation = "flower_good"
-frame = 5
+frame = 2
 
 [node name="Flower4" parent="Flower" instance=ExtResource( 4 )]
 position = Vector2( -38, 16 )
 animation = "flower_good"
-frame = 7
 
 [node name="Flower5" parent="Flower" instance=ExtResource( 4 )]
 position = Vector2( 30, 38 )
 animation = "flower_good"
-frame = 8
+frame = 5

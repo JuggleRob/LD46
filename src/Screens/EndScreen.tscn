@@ -1,10 +1,13 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://assets/font/theme.tres" type="Theme" id=1]
 [ext_resource path="res://src/UI/play_button.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/dead sheep.png" type="Texture" id=3]
 [ext_resource path="res://assets/it_died.png" type="Texture" id=4]
 [ext_resource path="res://src/Screens/EndScreen.gd" type="Script" id=5]
+[ext_resource path="res://src/UI/score.gd" type="Script" id=6]
+[ext_resource path="res://src/UI/flowers_eaten.tscn" type="PackedScene" id=7]
+[ext_resource path="res://src/UI/score.tscn" type="PackedScene" id=8]
 
 [sub_resource type="Animation" id=1]
 resource_name = "drop"
@@ -86,34 +89,10 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="flowers_eaten" type="Label" parent="."]
-anchor_left = 0.5
-anchor_right = 0.5
-margin_left = -62.0
-margin_top = -14.63
-margin_right = 68.0
-margin_bottom = 0.370014
-size_flags_horizontal = 3
-size_flags_vertical = 6
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "Flowers eaten:"
-align = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="flowers_eaten" parent="." instance=ExtResource( 7 )]
 
-[node name="score" type="Label" parent="."]
-anchor_left = 0.5
-anchor_right = 0.5
-margin_left = -62.0
-margin_top = -14.63
-margin_right = 68.0
-margin_bottom = 0.369984
-size_flags_horizontal = 3
-size_flags_vertical = 7
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "Distance covered:"
-align = 2
+[node name="score" parent="." instance=ExtResource( 8 )]
+script = ExtResource( 6 )
 
 [node name="play_button" parent="." instance=ExtResource( 2 )]
 anchor_left = 0.5
