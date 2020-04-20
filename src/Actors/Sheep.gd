@@ -6,9 +6,9 @@ signal show_game_over
 var path
 var max_stomach = 65
 var stomach = 65
-var hunger_rate = 2
-var eat_rate = 30
-var poison_rate = 10
+var hunger_rate = 3
+var eat_rate = 15
+var poison_rate = 20
 var eat_countdown = 0
 var eat_duration = 1
 var move_dir
@@ -63,8 +63,6 @@ func idle_ends():
 		return
 	# Eat flowers, if any
 	var eaten = objects.eat_at_coords(self.diam_coords, self)
-#	if move_dir == Vector2(0, 0):
-#		return
 	# Idle for a turn
 	if eaten:
 		set_move_dir(Vector2(0, 0))
@@ -75,7 +73,11 @@ func idle_ends():
 	left_dir = Vector2(round(left_dir.x), round(left_dir.y))
 	var right_dir = move_dir.rotated(0.5 * PI)
 	right_dir = Vector2(round(right_dir.x), round(right_dir.y))
-	var dirs = [move_dir, left_dir, right_dir]
+	var dirs
+	if randf() > 0.5:
+		dirs = [move_dir, left_dir, right_dir]
+	else:
+		dirs = [move_dir, right_dir, left_dir]
 	var flower_found = false
 	# height level of the farthest levels in directions (like dirs)
 	var lvls = [current_level, current_level, current_level]
@@ -122,6 +124,10 @@ func jump_ends():
 	if Globals.game_over:
 		return
 	idle_ends()
+	stomach = max(0, stomach - hunger_rate)
+	emit_signal("update_stomach", stomach)
+	if stomach <= 0:
+		die()
 #	var test = randi() % 4
 #	if test == 0:
 #		set_move_dir(Vector2(1, 0))
@@ -133,22 +139,11 @@ func jump_ends():
 #		set_move_dir(Vector2(0, -1))
 
 func die():
-	print("dying alright")
 	path = null
 	set_move_dir(Vector2(0, 0))
 	Globals.game_over = true
 	$AnimationPlayer/sprite.set_animation("death")
 	$"/root/Game/Audio/death".play()
-
-func _process(delta):
-	if not Globals.game_over:
-		#stomach = max(0, stomach - delta * hunger_rate)
-		if eat_countdown > 0:
-			eat_countdown = max(0, eat_countdown - delta)
-			stomach = min(max_stomach, stomach + delta * eat_rate)
-		emit_signal("update_stomach", stomach)
-		if stomach <= 0:
-			die()
 
 func _input(event):
 	if event.is_action_pressed("ui_accept") and Globals.paused:

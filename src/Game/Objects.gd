@@ -29,6 +29,7 @@ func get_objects(coords):
 	return objects.get(coords, null)
 
 func eat_at_coords(coords, eater):
+	var eaten
 	var obj_array = objects.get(coords)
 	if obj_array != null:
 		for obj in obj_array:
@@ -37,13 +38,12 @@ func eat_at_coords(coords, eater):
 				$"/root/Game/UI/flowers_eaten".text = "Flowers eaten: " + str(Globals.flowers_eaten)
 				if obj.animation == "flower_good":
 					$"/root/Game/Audio/flower_good".play()
-					eater.eat_countdown = eater.eat_duration
+					eater.stomach = min(eater.max_stomach, eater.stomach + eater.eat_rate)
 				elif obj.animation == "flower_bad":
 					$"/root/Game/Audio/flower_bad".play()
 					eater.stomach = max(0, eater.stomach - eater.poison_rate)
 					eater.emit_signal("update_stomach", eater.stomach)
 					if eater.stomach <= 0:
-						print("happens?")
 						eater.die()
 				obj_array.erase(obj)
 				obj.queue_free()
