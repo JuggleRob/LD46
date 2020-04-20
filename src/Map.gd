@@ -205,27 +205,27 @@ func reachable(src, tgt):
 		side_src_idx = 3
 	var side_tgt_idx = (side_src_idx + 2) % 4
 	var conn_same = {
-		HIGH: [HIGH, WATER],
-		LOW: [LOW, WATER],
+		HIGH: [HIGH],
+		LOW: [LOW],
 		CW_DOWN: [CW_UP],
 		CW_UP: [CW_DOWN],
-		WATER: [HIGH, LOW],
+		WATER: [],
 		EMPTY: []
 	}
 	var conn_up = {
-		HIGH: [LOW, WATER],
+		HIGH: [LOW],
 		LOW: [WATER],
 		CW_DOWN: [],
 		CW_UP: [],
-		WATER: [HIGH, LOW],
+		WATER: [],
 		EMPTY: []
 	}
 	var conn_down = {
-		HIGH: [WATER],
-		LOW: [HIGH, WATER],
+		HIGH: [],
+		LOW: [HIGH],
 		CW_DOWN: [],
 		CW_UP: [],
-		WATER: [HIGH, LOW],
+		WATER: [],
 		EMPTY: []
 	}
 	var src_lvl = top_level(src)
