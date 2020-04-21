@@ -137,7 +137,7 @@ func jump_ends():
 	if stomach <= 0:
 		die()
 	if diam_coords == Vector2(3,-10):
-		print("BRUG")
+		$"/root/Game/UI/bridge".show_bridge()
 
 func die():
 	path = null

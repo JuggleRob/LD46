@@ -1,9 +1,10 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://src/Game/AnimatedSprite.gd" type="Script" id=1]
 [ext_resource path="res://src/Game/Game.gd" type="Script" id=2]
 [ext_resource path="res://src/Camera2D.gd" type="Script" id=3]
 [ext_resource path="res://src/Map.gd" type="Script" id=4]
+[ext_resource path="res://src/Game/bridge.gd" type="Script" id=5]
 [ext_resource path="res://src/Actors/Sheep.tscn" type="PackedScene" id=6]
 [ext_resource path="res://src/Game/Objects.gd" type="Script" id=7]
 [ext_resource path="res://assets/levels/testlevel_02.tmx" type="PackedScene" id=8]
@@ -13,6 +14,7 @@
 [ext_resource path="res://assets/sound/bg.ogg" type="AudioStream" id=12]
 [ext_resource path="res://assets/sound/death01.wav" type="AudioStream" id=13]
 [ext_resource path="res://src/UI/score.tscn" type="PackedScene" id=14]
+[ext_resource path="res://assets/sound/bridge.wav" type="AudioStream" id=15]
 [ext_resource path="res://assets/font/text_default.tres" type="DynamicFont" id=16]
 [ext_resource path="res://assets/health_bar.png" type="Texture" id=17]
 [ext_resource path="res://src/Game/healthbar.gd" type="Script" id=18]
@@ -113,6 +115,7 @@ format = 1
 script = ExtResource( 18 )
 
 [node name="bridge" type="Label" parent="UI"]
+visible = false
 anchor_top = 1.0
 anchor_bottom = 1.0
 margin_left = 2.84401
@@ -122,9 +125,15 @@ margin_bottom = -1.70642
 custom_fonts/font = ExtResource( 16 )
 custom_colors/font_color = Color( 0.980392, 0.976471, 0.980392, 1 )
 text = "You crossed the bridge!"
+script = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Timer" type="Timer" parent="UI/bridge"]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="UI/bridge"]
+stream = ExtResource( 15 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="UI"]
 anims/bridge_cross = SubResource( 2 )
