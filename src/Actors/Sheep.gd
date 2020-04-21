@@ -124,6 +124,8 @@ func idle_ends():
 func jump_ends():
 	Globals.distance_covered += 1
 	Globals.difficulty = Globals.difficulty + 0.01 * (0.7 - Globals.difficulty)
+	$AnimationPlayer/sprite.speed_scale = 2 + Globals.difficulty
+	print(Globals.difficulty)
 	stomach -= 1
 	$"/root/Game/UI/steps".text = "Steps: " + str(Globals.distance_covered)
 	if Globals.game_over:
