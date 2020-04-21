@@ -16,6 +16,7 @@ func show_bridge():
 	$Timer.connect("timeout", self, "hide_bridge")
 	$Timer.set_wait_time(5)
 	$Timer.start()
+	$"../AnimationPlayer".play("bridge_cross")
 	
 func hide_bridge():
 	self.visible = false
