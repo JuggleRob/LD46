@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/bridge.wav-8df7a6fb9a6e4c86b71b1833ea615717.sample"
+
+[deps]
+
+source_file="res://assets/sound/bridge.wav"
+dest_files=[ "res://.import/bridge.wav-8df7a6fb9a6e4c86b71b1833ea615717.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0
