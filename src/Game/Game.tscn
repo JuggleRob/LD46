@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://src/Game/AnimatedSprite.gd" type="Script" id=1]
 [ext_resource path="res://src/Game/Game.gd" type="Script" id=2]
@@ -47,6 +47,23 @@
 1/shapes = [  ]
 1/z_index = 0
 
+[sub_resource type="Animation" id=2]
+resource_name = "bridge_cross"
+length = 0.6
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("bridge:custom_colors/font_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.3, 0.5, 0.6, 2 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 1 ), Color( 0, 0, 0, 1 ), Color( 0.980392, 0.976471, 0.980392, 1 ), Color( 0.980392, 0.976471, 0.980392, 1 ), Color( 0, 0, 0, 1 ), Color( 0.980392, 0.976471, 0.980392, 1 ) ]
+}
+
 [node name="Game" type="Control"]
 script = ExtResource( 2 )
 __meta__ = {
@@ -94,6 +111,23 @@ tile_set = SubResource( 1 )
 cell_size = Vector2( 6, 2 )
 format = 1
 script = ExtResource( 18 )
+
+[node name="bridge" type="Label" parent="UI"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 2.84401
+margin_top = -15.7065
+margin_right = 126.844
+margin_bottom = -1.70642
+custom_fonts/font = ExtResource( 16 )
+custom_colors/font_color = Color( 0.980392, 0.976471, 0.980392, 1 )
+text = "You crossed the bridge!"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="UI"]
+anims/bridge_cross = SubResource( 2 )
 
 [node name="Audio" type="Node" parent="."]
 

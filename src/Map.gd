@@ -74,7 +74,7 @@ func _ready():
 	var startpos_node = $"Other/Startpos".get_child(0)
 	var startrect = startpos_node.position
 	startpos = Globals.tiled_to_diam(startrect)
-	sheep.set_coords(startpos)
+	sheep.set_coords(Vector2(1,-11))
 	sheep.set_move_dir(Vector2(0, 1))
 	sheep.set_move_dir(Vector2(0, 0))
 	random_flowers()

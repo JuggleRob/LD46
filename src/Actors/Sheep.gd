@@ -136,6 +136,8 @@ func jump_ends():
 	emit_signal("update_stomach", stomach)
 	if stomach <= 0:
 		die()
+	if diam_coords == Vector2(3,-10):
+		print("BRUG")
 
 func die():
 	path = null
